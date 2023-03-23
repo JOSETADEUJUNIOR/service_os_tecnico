@@ -74,7 +74,7 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
                 </li>
 
                 <li class="">
-                    <a href="alterar_senha.php">
+                    <a href="mudar_senha.php">
                         <i class="menu-icon fa fa-caret-right"></i>
                         Alterar Senha
                     </a>

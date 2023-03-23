@@ -1,6 +1,6 @@
 <?php
 
-define('PATH_URL', $_SERVER["DOCUMENT_ROOT"] . '/systecnicoapi/src/');
+define('PATH_URL', $_SERVER["DOCUMENT_ROOT"] . '/service_os_tecnico/src/');
 
 const SITUACAO_EM_ABERTO      = 1;
 const SITUACAO_EM_ATENDIMENTO = 2;

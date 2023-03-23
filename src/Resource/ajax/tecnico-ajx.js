@@ -17,7 +17,7 @@ function FiltrarChamadoAberto(){
     $.ajax({
         type: "POST",
         // url: BASE_URL_AJAX("funcionario_api"),
-        url: "http://localhost/syscompra/src/Resource/api/tecnico_api.php",
+        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -47,7 +47,7 @@ function ValidarAcesso() {
     }
     $.ajax({
         type: "POST",
-        url: "http://localhost/syscompra/src/Resource/api/tecnico_api.php",
+        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -94,7 +94,7 @@ function CarregarMeusDados() {
     }
     $.ajax({
         type: "POST",
-        url: "http://localhost/syscompra/src/Resource/api/tecnico_api.php",
+        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -145,7 +145,7 @@ function AlterarMeusDados(id_form) {
         $.ajax({
 
             type: "POST",
-            url: "http://localhost/syscompra/src/Resource/api/tecnico_api.php",
+            url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
             data: JSON.stringify(dados),
             headers: {
                 'Authorization': 'Bearer ' + GetTnk(),
@@ -182,7 +182,7 @@ function AtenderChamado() {
     $.ajax({
 
         type: "POST",
-        url: "http://localhost/syscompra/src/Resource/api/tecnico_api.php",
+        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -218,7 +218,7 @@ function FiltrarChamado(situacao = 4) {
     $.ajax({
         type: "POST",
         // url: BASE_URL_AJAX("funcionario_api"),
-        url: "http://localhost/syscompra/src/Resource/api/tecnico_api.php",
+        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -295,7 +295,7 @@ function VerificarSenhaAtual() {
     $.ajax({
         type: "POST",
         // url: BASE_URL_AJAX("funcionario_api"),
-        url: "http://localhost/projetoCurso/src/Resource/api/funcionario_api.php",
+        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -396,7 +396,7 @@ function finalizarChamado(id_form) {
         $.ajax({
 
             type: "POST",
-            url: "http://localhost/syscompra/src/Resource/api/tecnico_api.php",
+            url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
             data: JSON.stringify(dados),
             headers: {
                 'Content-Type': 'application/json'
