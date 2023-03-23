@@ -1,0 +1,18 @@
+{
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "require": {
+        "yoeunes/toastr": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Src\\": "src/"
+        },
+        "files": [
+            "src/Config/fixos.php"
+        ]
+    }
+}
