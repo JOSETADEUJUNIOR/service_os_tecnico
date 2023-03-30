@@ -46,7 +46,7 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
     <ul class="nav nav-list">
         <li class="">
-            <a href="index.html">
+            <a href="index.php">
                 <i class="menu-icon fa fa-tachometer"></i>
                 <span class="menu-text"> Dashboard </span>
             </a>
