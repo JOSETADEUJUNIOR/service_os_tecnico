@@ -1,5 +1,6 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <link rel="icon" type="image/x-icon" href="../Template/assets/images/gallery/JR.png">
   <meta charset="utf-8" />
   <title>systecnico</title>
 

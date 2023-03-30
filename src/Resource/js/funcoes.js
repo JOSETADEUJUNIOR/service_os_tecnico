@@ -41,7 +41,6 @@ function ModalMais(data_atendimento, data_encerramento = "", tec_atendimento = "
     }
 }
 function ModalFinalizaChamado(id, idAlocado, data_atendimento, tec_atendimento, laudo = "") {
-    console.log('testes');
     $("#id_chamado_finalizado").val(id);
     $("#id_alocado").val(idAlocado);
     $("#dt_atendido").val(data_atendimento);
@@ -49,7 +48,7 @@ function ModalFinalizaChamado(id, idAlocado, data_atendimento, tec_atendimento, 
     $("#laudofinal").val(laudo);
 }
 function AlterarUsuarioModal(id, tipo, nome, email, telefone, cep, rua, bairro, cidade, sigla_estado, empresa_tecnico, setor_id, id_end) {
-    alert('chamou');
+    
     EscolherUsuario(tipo);
     $("#id_user").val(id);
     $("#tipo").val(tipo);
@@ -114,12 +113,17 @@ function CarregarModalStatus(id, nome, status_atual) {
     $("#status_atual").val(status_atual);
 }
 
+//para acesso localhost
+/* function BASE_URL_AJAX($file_ajax) {
+    return "http://localhost/service_os/src/Resource/api/" + $file_ajax + ".php";
+} */
+
+//para acesso em produção
 function BASE_URL_AJAX($file_ajax) {
-    return "http://localhost/syscompra/src/Resource/api/" + $file_ajax + ".php";
+    return "https://siteparaseunegocio.com/service_os/src/Resource/api/" + $file_ajax + ".php";
 }
 function EscolherUsuario(tipo) {
-    alert(tipo);
-
+   
     switch (tipo) {
         case '2':
             $("#divFunc").show();

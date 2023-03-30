@@ -17,7 +17,7 @@ function FiltrarChamadoAberto(){
     $.ajax({
         type: "POST",
         // url: BASE_URL_AJAX("funcionario_api"),
-        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+        url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -28,6 +28,7 @@ function FiltrarChamadoAberto(){
 
            const quantidadeBell = resultado.QuantidadeChamado;
            $("#QuantidadeChamado").html('+'+ resultado.QuantidadeChamado);
+           $("#QuantidadeChamadoSpan").html('+'+ resultado.QuantidadeChamado);
                 $("#bell").addClass('fa-bell icon-animated-bell');
                
            
@@ -38,7 +39,6 @@ function FiltrarChamadoAberto(){
 }
 
 function ValidarAcesso() {
-
     var dados = {
         email: $("#login").val(),
         senha: $("#senha").val(),
@@ -47,7 +47,7 @@ function ValidarAcesso() {
     }
     $.ajax({
         type: "POST",
-        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+        url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -55,7 +55,7 @@ function ValidarAcesso() {
         },
         success: function (dados_ret) {
             var ret = dados_ret['result'];
-
+            console.log(ret);
             if (ret == -3) {
                 MensagemGenerica('Não autorizado', 'info');
             } else if (ret == 0) {
@@ -94,7 +94,7 @@ function CarregarMeusDados() {
     }
     $.ajax({
         type: "POST",
-        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+        url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -145,7 +145,7 @@ function AlterarMeusDados(id_form) {
         $.ajax({
 
             type: "POST",
-            url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+            url:BASE_URL_AJAX("tecnico_api"),
             data: JSON.stringify(dados),
             headers: {
                 'Authorization': 'Bearer ' + GetTnk(),
@@ -182,7 +182,7 @@ function AtenderChamado() {
     $.ajax({
 
         type: "POST",
-        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+        url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -218,7 +218,7 @@ function FiltrarChamado(situacao = 4) {
     $.ajax({
         type: "POST",
         // url: BASE_URL_AJAX("funcionario_api"),
-        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+        url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -286,16 +286,20 @@ function FiltrarChamado(situacao = 4) {
 }
 
 function VerificarSenhaAtual() {
-
+    let dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id){
+        Sair();
+    }
+    let id_user_tec = dadosAPI.tecnico_id;
     var dados = {
         endpoint: 'VerificarSenhaAtual',
-        id: 9,
+        id: id_user_tec,
         senha: $("#senha").val()
     };
     $.ajax({
         type: "POST",
         // url: BASE_URL_AJAX("funcionario_api"),
-        url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+        url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
             'Authorization': 'Bearer ' + GetTnk(),
@@ -321,16 +325,20 @@ function VerificarSenhaAtual() {
 }
 
 function AtualizarSenha() {
+    let dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id){
+        Sair();
+    }
+    let id_user_tec = dadosAPI.tecnico_id;
     var dados = {
         endpoint: "AtualizarSenha",
-        id: 32,
+        id: id_user_tec,
         senha: $("#newsenha").val().trim(),
         repetir_senha: $("#resenha").val().trim()
     };
     $.ajax({
         type: "POST",
-        // url: BASE_URL_AJAX("funcionario_api"),
-        url: "http://localhost/projetoCurso/src/Resource/api/funcionario_api.php",
+        url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
             'Content-Type': 'application/json'
@@ -396,7 +404,7 @@ function finalizarChamado(id_form) {
         $.ajax({
 
             type: "POST",
-            url: "http://localhost/service_os/src/Resource/api/tecnico_api.php",
+            url:BASE_URL_AJAX("tecnico_api"),
             data: JSON.stringify(dados),
             headers: {
                 'Content-Type': 'application/json'

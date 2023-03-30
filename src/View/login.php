@@ -2,7 +2,7 @@
 
     require_once dirname(__DIR__, 2) . '/vendor/autoload.php'; ?>
  <!DOCTYPE html>
- <html lang="en">
+ <html lang="pt-br">
 
  <head>
      <?php include_once PATH_URL . './Template/_includes/_head.php' ?>
@@ -17,8 +17,8 @@
                          <div class="center">
                              <h1>
                                  <i class="ace-icon fa fa-ticket white"></i>
-                                 <span class="white">Gestão</span>
-                                 <span class="white" id="id-text2">de Chamados</span>
+                                 <span class="white">JRA - </span>
+                                 <span class="white" id="id-text2">Service OS</span>
                              </h1>
                              <h4 class="white" id="id-company-text">&copy; Acesso para técnicos</h4>
                          </div>
@@ -30,7 +30,7 @@
                                  <div class="widget-body">
                                      <div class="widget-main">
                                          <h4 class="header blue lighter bigger">
-                                             <i class="ace-icon fa fa-coffee green"></i>
+                                             <i class="orange ace-icon fa fa-key green"></i>
                                              Insira seus dados de acesso
                                          </h4>
 
