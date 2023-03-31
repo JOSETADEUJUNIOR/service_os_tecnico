@@ -38,7 +38,9 @@ function FiltrarChamadoAberto(){
     })
 }
 
-function ValidarAcesso() {
+function ValidarAcesso(id_form) {
+    if (NotificarCampos(id_form)) {
+       
     var dados = {
         email: $("#login").val(),
         senha: $("#senha").val(),
@@ -50,7 +52,7 @@ function ValidarAcesso() {
         url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
-            'Authorization': 'Bearer ' + GetTnk(),
+            
             'Content-Type': 'application/json'
         },
         success: function (dados_ret) {
@@ -75,6 +77,8 @@ function ValidarAcesso() {
 
         }
     })
+}
+
     return false;
 }
 
@@ -86,7 +90,6 @@ function CarregarMeusDados() {
         Sair();
     }
     var id_user_logado = dadosAPI.tecnico_id;
-
     var endpoint_cliente = "DetalharMeusDados";
     var dados = {
         endpoint: endpoint_cliente,
@@ -121,7 +124,6 @@ function CarregarMeusDados() {
 function AlterarMeusDados(id_form) {
     
     if (NotificarCampos(id_form)) {
-        alert(id_form);
         let dadosAPI = GetTnkValue();
         if (!dadosAPI.tecnico_id){
             Sair();
@@ -152,13 +154,13 @@ function AlterarMeusDados(id_form) {
                 'Content-Type': 'application/json'
             },
             success: function (dados_ret) {
-                var resultado = dados_ret['result'];
-
-                if (resultado == -1) {
-                  alert('dddd');
-                } else {
-                   console.log('dasdasdas');
-                } 
+                var resultado = dados_ret["result"];
+                console.log(resultado);
+                if (resultado == 1) {
+                   MensagemGenerica("Dados alterados com sucesso", "success");
+                }else{
+                    MensagemErro();  
+                }
             }
         })
 
@@ -341,6 +343,7 @@ function AtualizarSenha() {
         url:BASE_URL_AJAX("tecnico_api"),
         data: JSON.stringify(dados),
         headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
             'Content-Type': 'application/json'
         },
         success: function (dados_ret) {
@@ -407,11 +410,12 @@ function finalizarChamado(id_form) {
             url:BASE_URL_AJAX("tecnico_api"),
             data: JSON.stringify(dados),
             headers: {
+                'Authorization': 'Bearer ' + GetTnk(),
                 'Content-Type': 'application/json'
             },
             success: function (dados_ret) {
                 var resultado = dados_ret["result"];
-
+                console.log(resultado);
                 if (resultado == '1') {
                     MensagemSucesso();
                     FiltrarChamado();

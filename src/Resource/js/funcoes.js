@@ -1,3 +1,6 @@
+
+const URL_API = window.PATH_URL = document.location.origin + '/service_os/src/Resource/api/';
+
 function load() {
     $("#divload").addClass("overlay").html('<i class="fas fa-2x fa-sync-alt fa-spin"> </i>');
 }
@@ -113,14 +116,10 @@ function CarregarModalStatus(id, nome, status_atual) {
     $("#status_atual").val(status_atual);
 }
 
-//para acesso localhost
-/* function BASE_URL_AJAX($file_ajax) {
-    return "http://localhost/service_os/src/Resource/api/" + $file_ajax + ".php";
-} */
 
 //para acesso em produção
 function BASE_URL_AJAX($file_ajax) {
-    return "https://siteparaseunegocio.com/service_os/src/Resource/api/" + $file_ajax + ".php";
+    return URL_API + $file_ajax + ".php";
 }
 function EscolherUsuario(tipo) {
    

@@ -45,14 +45,14 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
     </div><!-- /.sidebar-shortcuts -->
 
     <ul class="nav nav-list">
-        <li class="">
+        <!-- <li class="">
             <a href="index.php">
                 <i class="menu-icon fa fa-tachometer"></i>
                 <span class="menu-text"> Dashboard </span>
             </a>
 
             <b class="arrow"></b>
-        </li>
+        </li> -->
         <li class="">
             <a href="#" class="dropdown-toggle">
                 <i class="menu-icon fa fa-list"></i>

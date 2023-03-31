@@ -38,61 +38,99 @@
 				</div>
 				<!-- conteudo da pagina -->
 				<div class="page-content">
-                <input type="hidden" id="id_end">
-                <form action="mudar_senha" id="form_mudarSenha" method="post">
-				    <div class="col-md-12">
 					<div class="row">
-						<div class="col-md-12" id="divSenhaAtual">
-							<div class="col-md-12">
-								<div class="form-group">
-									<label>Senha atual</label><span style="margin-left: 3px;;"><i onclick="VerSenha()" class="fa fa-eye fa-0x"></i></span>
-									<input type="password" class="form-control obg" id="senha" name="senha" placeholder="Digite o aqui....">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-12">
+
+									<div class="col-xs-12 col-sm-12 widget-container-col ui-sortable" id="widget-container-col-5">
+										<div class="widget-box ui-sortable-handle" id="widget-box-5">
+											<div class="widget-header">
+												<i class="orange ace-icon fa fa-key bigger-110"></i>
+												<h5 class="widget-title smaller">Alterar senha</h5>
+
+
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main padding-6">
+													<div class="alert alert">
+
+														<form action="" id="form_alterar_senha">
+															<fieldset>
+																<div class="row">
+																	<input type="hidden" id="id_end">
+																	<div class="col-md-12 col-xs-12">
+																		<div class="row">
+																			<div class="col-md-12 col-xs-12" id="divSenhaAtual">
+																				<div class="col-md-12 col-xs-12">
+																					<div class="form-group">
+																						<label>Senha atual</label><span style="margin-left: 3px;"><i onclick="VerSenha()" class="fa fa-eye fa-0x"></i></span>
+																						<input type="password" class="form-control obg" id="senha" name="senha" placeholder="Digite o aqui....">
+																					</div>
+																					<button class="btn btn-success col-md-12 col-xs-12" onclick="return VerificarSenhaAtual('form_alterar_senha')">Validar</button>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</fieldset>
+
+														</form>
+
+														<form action="" id="form_nova_senha">
+															<fieldset>
+																<div class="row">
+																	<div class="col-md-12 col-xs-12" id="divMudarSenha" style="display: none;">
+																		<div class="row">
+																			<div class="col-md-12 col-xs-12">
+																				<div class="form-group">
+																					<label>Nova senha</label>
+																					<input type="password" class="form-control obg" id="newsenha" name="newsenha" placeholder="Digite o aqui....">
+																				</div>
+																			</div>
+																			<div class="col-md-12 col-xs-12">
+																				<div class="form-group">
+																					<label>Repetir senha</label>
+																					<input type="password" class="form-control obg" id="resenha" name="resenha" placeholder="Digite o aqui....">
+																				</div>
+																				<button class="btn btn-success col-md-12 col-xs-12" onclick="return AtualizarSenha('form_nova_senha')">Gravar</button>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+															</fieldset>
+														</form>
+
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<button class="btn btn-success" onclick="return VerificarSenhaAtual()">Validar</button>
 							</div>
-						</div> 
-					</div> 
-                    </form>
-					<div class="col-md-12">
-                        <form id="formNovaSenha" action="mudar_senha.php" method="post">
-                            <div class="col-md-12" id="divMudarSenha" style="display: none;">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Nova senha</label>
-                                        <input type="password" class="form-control obg" id="newsenha" name="newsenha" placeholder="Digite o aqui....">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Repetir senha</label>
-                                        <input type="password" class="form-control obg" id="resenha" name="resenha" placeholder="Digite o aqui....">
-                                    </div>
-                                </div>
-
-                                <button class="btn btn-success" onclick="return AtualizarSenha()">Gravar</button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div><!-- /.col -->
-					</div><!-- /.row -->
-				<!-- /.final do conteudo da pagina -->
-				<div id="divload">
-
+						</div>
+					</div><!-- /.col -->
 				</div>
-			
+			</div><!-- /.row -->
+			<!-- /.final do conteudo da pagina -->
+			<div id="divload">
+
+			</div>
+
 		</div><!-- /.main-content -->
 		<?php include_once PATH_URL . './Template/_includes/_footer.php' ?>
 	</div><!-- /.final do conteudo Princial -->
 
-	
+
 	<?php include_once PATH_URL . './Template/_includes/_scripts.php' ?>
 	<script src="../../Template/assets/js/bootbox.js"></script>
 	<script src="../Resource/js/mensagem.js"></script>
 	<script src="../Resource/ajax/funcionario-ajx.js"></script>
 	<script>
 		Verify();
-		
 	</script>
 	<script type="text/javascript">
 		if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");

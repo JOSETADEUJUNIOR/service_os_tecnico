@@ -37,64 +37,93 @@
 					</ul><!-- /.breadcrumb -->
 				</div>
 				<!-- conteudo da pagina -->
+
+
 				<div class="page-content">
-					<input type="hidden" id="id_end">
-					<form action="meus_dados.php" id="form_meusdados" method="post">
-						<div class="col-md-12">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Nome</label>
-										<input class="form-control obg" id="nome" name="nome" placeholder="Digite o aqui....">
+
+					<div class="col-md-12">
+
+
+
+						<div style="margin-top: 10px;" class="col-xs-12 col-sm-12 widget-container-col ui-sortable" id="widget-container-col-5">
+							<div class="widget-box ui-sortable-handle" id="widget-box-5">
+								<div class="widget-header">
+									<i class="orange ace-icon fa fa-database bigger-110"></i>
+									<h5 class="widget-title smaller">Alterar meus dados</h5>
+
+									<div class="widget-toolbar">
+
 									</div>
 								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Empresa</label>
-										<input class="form-control obg" id="empresa" name="empresa" placeholder="Digite o aqui....">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>E-mail</label>
-										<input class="form-control obg" id="email" name="email" placeholder="Digite o aqui....">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Telefone</label>
-										<input class="form-control obg" id="telefone" name="telefone" placeholder="Digite o aqui....">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Cep</label>
-										<input class="form-control obg" id="cep" name="cep" placeholder="Digite o aqui....">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Rua</label>
-										<input class="form-control obg" id="rua" name="rua" placeholder="Digite o aqui....">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Cidade</label>
-										<input class="form-control obg" id="cidade" name="cidade" placeholder="Digite o aqui....">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label>Estado</label>
-										<input class="form-control obg" id="estado" name="estado" placeholder="Digite o aqui....">
+
+								<div class="widget-body">
+									<div class="widget-main padding-6">
+										<div class="alert">
+											<input type="hidden" id="id_end">
+											<form action="meus_dados.php" id="form_meusdados" method="post">
+
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label>Nome</label>
+															<input class="form-control obg" id="nome" name="nome" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-2">
+														<div class="form-group">
+															<label>Empresa</label>
+															<input class="form-control obg" id="empresa" name="empresa" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-3">
+														<div class="form-group">
+															<label>E-mail</label>
+															<input class="form-control obg" id="email" name="email" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-3">
+														<div class="form-group">
+															<label>Telefone</label>
+															<input class="form-control obg" id="telefone" name="telefone" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-2">
+														<div class="form-group">
+															<label>Cep</label>
+															<input class="form-control obg" id="cep" name="cep" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group">
+															<label>Rua</label>
+															<input class="form-control obg" id="rua" name="rua" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-3">
+														<div class="form-group">
+															<label>Cidade</label>
+															<input class="form-control obg" id="cidade" name="cidade" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-3">
+														<div class="form-group">
+															<label>Estado</label>
+															<input class="form-control obg" id="estado" name="estado" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-12">
+														<button class="btn btn-success col-md-12" onclick="return AlterarMeusDados('form_meusdados')">Gravar</button>
+													</div>
+												</div>
+										</div>
+										</form>
 									</div>
 								</div>
 							</div>
-							<button class="btn btn-success col-md-12" onclick="return AlterarMeusDados('form_meusdados')">Gravar</button>
 						</div>
-					</form>
+					</div>
 				</div><!-- /.col -->
+
 			</div><!-- /.row -->
 			<!-- /.final do conteudo da pagina -->
 			<div id="divload">
@@ -109,8 +138,9 @@
 	<?php include_once PATH_URL . './Template/_includes/_scripts.php' ?>
 	<script src="../Resource/js/mensagem.js"></script>
 	<script src="../Resource/ajax/tecnico-ajx.js"></script>
+	<script src="../Resource/ajax/buscar_cep_ajx.js"></script>
 	<script>
-		//Verify();
+		Verify();
 		CarregarMeusDados();
 	</script>
 
