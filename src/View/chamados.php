@@ -109,12 +109,12 @@
 		}
 	</script> -->
 	<script>
-		$(document).ready(function() {
+	/* 	$(document).ready(function() {
 			setInterval(function() { //Quando o documento estiver pronto, dê um setinvertal em Redireciona()
 					Redireciona();
 				}, 5000 //o setInterval será executado a cada 5 segundo, igual a 5000
 			)
-		});
+		}); */
 	</script>
 
 </body>

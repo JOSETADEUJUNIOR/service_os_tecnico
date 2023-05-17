@@ -1,6 +1,6 @@
 function LimparCamposEndereco() {
     // Limpa valores do formulário de cep.
-    $("#endereco").val("");
+    $("#rua").val("");
     $("#bairro").val("");
     $("#cidade").val("");
     $("#estado").val("");
@@ -32,7 +32,7 @@ function BuscarCep(){
         if(validacep.test(cep)) {
 
             //Preenche os campos com "..." enquanto consulta webservice.
-            $("#endereco").val("...");
+            $("#rua").val("...");
             $("#bairro").val("...");
             $("#cidade").val("...");
             $("#estado").val("...");
@@ -42,7 +42,7 @@ function BuscarCep(){
 
                 if (!("erro" in dados)) {
                     //Atualiza os campos com os valores da consulta.
-                    $("#endereco").val(dados.logradouro);
+                    $("#rua").val(dados.logradouro);
                     $("#bairro").val(dados.bairro);
                     $("#cidade").val(dados.localidade);
                     $("#estado").val(dados.uf);

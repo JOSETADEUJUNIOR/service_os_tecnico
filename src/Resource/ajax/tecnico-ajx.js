@@ -1,5 +1,5 @@
 
-function ligarRedirecionamento() {
+/* function ligarRedirecionamento() {
     const myTimeout = setInterval(Redireciona, 5000);
 }
 function Redireciona() {
@@ -9,7 +9,7 @@ function Redireciona() {
         FiltrarChamado(4);
     }
 
-}
+} */
 function FiltrarChamadoAberto(){
    dados = {
     endpoint: 'FiltrarChamadoAberto'
@@ -215,7 +215,8 @@ function FiltrarChamado(situacao = 4) {
     }
     var dados = {
         situacao: filtro_chamado,
-        endpoint: 'FiltrarChamadoGeral'
+        endpoint: 'FiltrarChamadoGeral',
+        empresa_id: dadosAPI.empresa_id
     };
     $.ajax({
         type: "POST",
@@ -228,6 +229,7 @@ function FiltrarChamado(situacao = 4) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret['result'];
+            console.log(resultado);
             var QuantidadeAberto = 0;
             if (this.data_atendimento == null) {
                 $(resultado).each(function () {

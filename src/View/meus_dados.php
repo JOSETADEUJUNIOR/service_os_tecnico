@@ -90,7 +90,7 @@
 													<div class="col-md-2">
 														<div class="form-group">
 															<label>Cep</label>
-															<input class="form-control obg" id="cep" name="cep" placeholder="Digite o aqui....">
+															<input class="form-control obg" id="cep" name="cep" onblur="BuscarCep()" placeholder="Digite o aqui....">
 														</div>
 													</div>
 													<div class="col-md-4">
