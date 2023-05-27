@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <input type="hidden" id="id_chamado">
                     <input type="hidden" id="status_atual" name="status_atual">
-                    <label>Deseja atender o chamado? <span id="equipamento_atender"></span>?</label>
+                    <label>Deseja atender a ordem de serviço? <span id="equipamento_atender"></span>?</label>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-warning" onclick="FechandoModal('form_atender')" data-dismiss="modal">fechar</button>

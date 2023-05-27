@@ -47,10 +47,10 @@
 							<div class="row">
 								<div class="col-xs-12">
 									<div class="table-header">
-										Chamados Realizados
+										Ordem de serviço Realizada
 
 										<div style="display:inline-flex" id="dynamic-table_filter">
-											<input type="search" onkeyup="FiltrarSetor(this.value)" class="form-control input-sm" placeholder="buscar por setor" aria-controls="dynamic-table">
+											<input type="search" onkeyup="FiltrarOsNf(this.value)" class="form-control input-sm" placeholder="buscar por nf" aria-controls="dynamic-table">
 										</div>
 										<label style="margin-left:10px">
 											<input name="form-field-radio" id="CheckFuncionario" onclick="FiltrarChamado('4')" type="radio" class="ace" checked>
@@ -100,6 +100,7 @@
 	<script>
 		Verify();
 		FiltrarChamado();
+		
 	</script>
 	<!-- <script>
 		if ($("#verMais").is(":visible")) {
@@ -109,12 +110,12 @@
 		}
 	</script> -->
 	<script>
-	/* 	$(document).ready(function() {
+	$(document).ready(function() {
 			setInterval(function() { //Quando o documento estiver pronto, dê um setinvertal em Redireciona()
 					Redireciona();
-				}, 5000 //o setInterval será executado a cada 5 segundo, igual a 5000
+				}, 600000 //o setInterval será executado a cada 5 segundo, igual a 5000
 			)
-		}); */
+		});
 	</script>
 
 </body>

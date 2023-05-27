@@ -1,15 +1,38 @@
 
-/* function ligarRedirecionamento() {
-    const myTimeout = setInterval(Redireciona, 5000);
+ function ligarRedirecionamento() {
+    const myTimeout = setInterval(Redireciona, 600000);
 }
 function Redireciona() {
     if ($("#verMais").is(":visible")) {
     } else {
         FiltrarChamadoAberto();
         FiltrarChamado(4);
+        exibirNotificacao();
     }
 
-} */
+} 
+
+function exibirNotificacao() {
+    // Verifica se o navegador suporta notificações
+    if ('Notification' in window) {
+      // Solicita permissão para exibir notificações
+      Notification.requestPermission().then(function(permission) {
+        if (permission === 'granted') {
+          // Se a permissão for concedida, exibe a notificação
+          var notification = new Notification('Nova ordem de serviço', {
+            body: 'Uma nova ordem de serviço foi criada',
+            icon: 'fundo.jpg'
+          });
+  
+          // Reproduz um som de notificação
+          var audio = new Audio('som.mp3');
+          audio.play();
+        }
+      });
+    }
+  }
+
+
 function FiltrarChamadoAberto(){
    dados = {
     endpoint: 'FiltrarChamadoAberto'
@@ -246,30 +269,147 @@ function FiltrarChamado(situacao = 4) {
 
                 table_start = '<table class="table table-hover" id="dynamic-table"><thead>';
                 table_head = '<tr>';
-                table_head += '<th></th>';
+                table_head += '<th>Ver mais</th>';
+                table_head += '<th>Ação</th>';
+                table_head += '<th>NF</th>';
                 table_head += '<th>Data Abertura</th>';
                 table_head += '<th>Funcionário</th>';
-                table_head += '<th>Equipamento</th>';
+                table_head += '<th>Status</th>';
                 table_head += '<th>Problema</th>';
                 table_head += '</tr></thead><tbody>';
 
                 $(resultado).each(function () {
+                    var status = '';
                     table_data += '<tr>';
                     table_data += '<td>';
-                    if (this.data_atendimento != null) {
-                        table_data += '<button type="button" class="btn btn-block btn-primary btn-sm" onclick="ModalMais(' + "'" + this.data_atendimento + "'" + ', ' + "'" + (this.data_encerramento != null ? this.data_encerramento : '') + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.tecnico_encerramento != null ? this.tecnico_encerramento : '') + "'" + ',' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : 'sem laudo') + "'" + ')" data-toggle="modal" data-target="#verMais">ver mais</button>';
-                    }
-
-                    if (this.data_atendimento == null) {
-                        table_data += '<button type="button" class="btn btn-block btn-success btn-sm" onclick="CarregarAtendimentoModal(' + this.id + ', ' + "'" + this.identificacao + ' / ' + "Modelo: " + this.nome_modelo + ' / ' + this.nome_tipo + "'" + ')" data-toggle="modal" data-target="#modal-status" >Atender</button>';
+                    if (this.data_abertura != null && this.data_atendimento == null) {
+                        status = '<span class="label label-info arrowed-right arrowed-in">Em aberto</span>';
                     } else if (this.data_atendimento != null && this.data_encerramento == null) {
-                        table_data += '<button type="button" onclick="ModalFinalizaChamado(' + this.id + ',' + this.idAlocado + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : '') + "'" + ')" data-toggle="modal" data-target="#finalizarChamado" class="btn btn-block btn-success btn-sm">Finalizar</button>';
+                        status = '<span class="label label-warning arrowed arrowed-right">Em atendimento</span>';
+                    } else if (this.data_encerramento != null) {
+                        status = '<span class="label label-success arrowed-in arrowed-in-right">Concluída</span>';
+                    }
+                   
+                        
+                   
+                        table_data += '<button type="button" class="btn btn-info" onclick="ModalMais(' + "'" + this.id + "'" + ',' + "'" + this.data_abertura + "'" + ',' + "'" + this.numero_nf + "'" + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + (this.data_encerramento != null ? this.data_encerramento : '') + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.tecnico_encerramento != null ? this.tecnico_encerramento : '') + "'" + ',' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : 'sem laudo') + "'" + ')" data-toggle="modal" data-target="#verMais"><i class="ace-icon fa fa-info  align-top bigger-125 icon-on-right"></i></button>';
+                        
+                   
+                    table_data += '</td>';
+                    table_data += '<td>';
+                    if (this.data_atendimento == null) {
+                        table_data += '<button type="button" class="btn btn-xs btn-purple" onclick="CarregarAtendimentoModal(' + this.id + ', ' + "'" + this.numero_nf + "'" + ')" data-toggle="modal" data-target="#modal-status" ><i class="ace-icon fa fa-bolt bigger-110"></i>Atender<i class="ace-icon fa fa-arrow-right icon-on-right"></i></button>';
+                    } else if (this.data_atendimento != null && this.data_encerramento == null) {
+                        table_data += '<button type="button" onclick="ModalFinalizaChamado(' + this.id + ',' + this.idAlocado + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : '') + "'" + ')" data-toggle="modal" data-target="#finalizarChamado" class="btn btn-xs btn-success">Encerrar<i title="Encerrar" class="ace-icon fa fa-share bigger-110"></i></button>';
+                    } else if(this.data_encerramento != null) {
+                        table_data += '<span class="label label-danger arrowed-in">Encerrado</span>';
+                    }
+                    table_data += '</td>';
+                    table_data += '<td>' + this.numero_nf + '</td>';
+                    table_data += '<td>' + this.data_abertura + '</td>';
+                    table_data += '<td>' + this.nome_funcionario + '</td>';
+                    table_data += '<td>' + status +'</td>';
+                    table_data += '<td>' + this.descricao_problema + '</td>';
+                    table_data += '</tr>';
+                })
+                table_end = '</tbody></table>';
+
+                let vaso = table_start + table_head + table_data + table_end;
+
+                $("#dynamic-table").html(vaso);
+            } else {
+                MensagemGenerica("Nenhum chamado encontrado");
+                $("#dynamic-table").html('');
+            }
+        }
+
+
+    })
+
+}
+
+function FiltrarOsNf(valordigitado) {
+
+    let filtro_chamado = valordigitado;
+    console.log(filtro_chamado);
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id){
+        Sair();
+    }
+    var dados = {
+        buscar_nf: filtro_chamado,
+        endpoint: 'FiltrarPorNF',
+        empresa_id: dadosAPI.empresa_id
+    };
+    $.ajax({
+        type: "POST",
+        // url: BASE_URL_AJAX("funcionario_api"),
+        url:BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret['result'];
+            console.log(resultado);
+            var QuantidadeAberto = 0;
+            if (this.data_atendimento == null) {
+                $(resultado).each(function () {
+                    QuantidadeAberto = QuantidadeAberto + 1;
+                });
+            }
+
+            if (resultado) {
+
+                let table_start = '';
+                let table_head = '';
+                let table_data = '';
+                let table_end = '';
+
+                table_start = '<table class="table table-hover" id="dynamic-table"><thead>';
+                table_head = '<tr>';
+                table_head += '<th>Ver mais</th>';
+                table_head += '<th>Ação</th>';
+                table_head += '<th>NF</th>';
+                table_head += '<th>Data Abertura</th>';
+                table_head += '<th>Funcionário</th>';
+                table_head += '<th>Status</th>';
+                table_head += '<th>Problema</th>';
+                table_head += '</tr></thead><tbody>';
+
+                $(resultado).each(function () {
+                    var status = '';
+                    table_data += '<tr>';
+                    table_data += '<td>';
+                    if (this.data_abertura != null && this.data_atendimento == null) {
+                        status = '<span class="label label-info arrowed-right arrowed-in">Em aberto</span>';
+                    } else if (this.data_atendimento != null && this.data_encerramento == null) {
+                        status = '<span class="label label-warning arrowed arrowed-right">Em atendimento</span>';
+                    } else if (this.data_encerramento != null) {
+                        status = '<span class="label label-success arrowed-in arrowed-in-right">Concluída</span>';
+                    }
+                   
+                        
+                   
+                        table_data += '<button type="button" class="btn btn-info" onclick="ModalMais(' + "'" + this.id + "'" + ',' + "'" + this.data_abertura + "'" + ',' + "'" + this.numero_nf + "'" + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + (this.data_encerramento != null ? this.data_encerramento : '') + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.tecnico_encerramento != null ? this.tecnico_encerramento : '') + "'" + ',' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : 'sem laudo') + "'" + ')" data-toggle="modal" data-target="#verMais"><i class="ace-icon fa fa-info  align-top bigger-125 icon-on-right"></i></button>';
+                        
+                   
+                    table_data += '</td>';
+                    table_data += '<td>';
+                    if (this.data_atendimento == null) {
+                        table_data += '<button type="button" class="btn btn-xs btn-purple" onclick="CarregarAtendimentoModal(' + this.id + ', ' + "'" + this.numero_nf + "'" + ')" data-toggle="modal" data-target="#modal-status" ><i class="ace-icon fa fa-bolt bigger-110"></i>Atender<i class="ace-icon fa fa-arrow-right icon-on-right"></i></button>';
+                    } else if (this.data_atendimento != null && this.data_encerramento == null) {
+                        table_data += '<button type="button" onclick="ModalFinalizaChamado(' + this.id + ',' + this.idAlocado + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : '') + "'" + ')" data-toggle="modal" data-target="#finalizarChamado" class="btn btn-xs btn-success">Encerrar<i title="Encerrar" class="ace-icon fa fa-share bigger-110"></i></button>';
+                    } else if(this.data_encerramento != null) {
+                        table_data += '<span class="label label-danger arrowed-in">Encerrado</span>';
                     }
                     table_data += '</td>';
 
+                    table_data += '<td>' + this.numero_nf + '</td>';
                     table_data += '<td>' + this.data_abertura + '</td>';
                     table_data += '<td>' + this.nome_funcionario + '</td>';
-                    table_data += '<td>' + this.identificacao + ' / ' + "Modelo: " + this.nome_modelo + ' / ' + this.nome_tipo + '</td>';
+                    table_data += '<td>' + status +'</td>';
                     table_data += '<td>' + this.descricao_problema + '</td>';
                     table_data += '</tr>';
                 })
@@ -431,4 +571,146 @@ function finalizarChamado(id_form) {
 
     }
     return false;
+}
+
+function CarregarProdutosOS(id) {
+    alert(id);
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+
+    var dados = {
+        endpoint: 'CarregarProdServOS',
+        chamado_id: id,
+    };
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var itens = dados_ret['result'];
+            console.log(itens);
+            preencherTabelaItens(itens);
+
+        }
+    })
+    return false;
+}
+
+
+function preencherTabelaItens(itens) {
+
+    if (itens != "") {
+
+        $("#div_listagem_itens_os").show();
+        var tabelaItens_os = $("#tabela-itens_os tbody");
+        tabelaItens_os.empty(); // Limpa as linhas anteriores da tabela
+
+        var totalGeral = 0; // Inicializa o total geral como 0
+        var valorTotal;
+        for (var i = 0; i < itens.length; i++) {
+            var item = itens[i];
+            var linha_os = $("<tr></tr>");
+
+            // Verifica se é um produto ou serviço
+            var tipoItem = item.ProdDescricao ? "Produto" : "Serviço";
+            var colunaTipo_os = $("<td></td>").text(tipoItem);
+
+            if (item.ProdDescricao) {
+                // É um produto
+                var colunaDescricao_os = $("<td></td>").text(item.ProdDescricao);
+                var colunaQuantidade_os_prod = $("<td></td>").text(item.quantidade);
+                var colunaValorUnitario_os = $("<td></td>").text(formatarValorEmReais(item.valor));
+                var valorTotal = item.quantidade * item.valor;
+                var colunaValorTotal = $("<td></td>").text(formatarValorEmReais(valorTotal));
+                /* var botaoExcluir = $("<button class=\"red\"><i title=\"Excluir\" class=\"ace-icon fa fa-trash-o bigger-120\"></i></button>");
+                botaoExcluir.attr("data-referencia-id", item.referencia_id);
+                botaoExcluir.attr("data-produto-id", item.produto_ProdID);
+                botaoExcluir.attr("data-quantidade", item.quantidade);
+
+                botaoExcluir.click(function () {
+                    var referenciaId = $(this).attr("data-referencia-id");
+                    var produtoId = $(this).attr("data-produto-id");
+                    var quantidade = $(this).attr("data-quantidade");
+                    alert(quantidade);
+                    RemoveProdOS(referenciaId, quantidade, produtoId);
+                }); */
+
+              /*   var colunaExcluir = $("<td></td>").append(botaoExcluir); */
+
+                linha_os.append(colunaDescricao_os, colunaTipo_os, colunaQuantidade_os_prod, colunaValorUnitario_os, colunaValorTotal);
+            } else {
+                // É um serviço
+                var quantidadeServico;
+                if (item.quantidade > 1) {
+                    quantidadeServico = item.quantidade;
+                } else {
+                    quantidadeServico = 1;
+                }
+                var colunaDescricao_os = $("<td></td>").text(item.ServNome);
+                var colunaQuantidade_os = $("<td></td>").text(quantidadeServico);
+                var colunaValorUnitario_os = $("<td></td>").text(formatarValorEmReais(item.valor));
+                var valorTotal = 1 * item.valor;
+                var colunaValorTotal = $("<td></td>").text(formatarValorEmReais(valorTotal));
+               /*  var botaoExcluir = $("<button class=\"red\"><i title=\"Excluir\" class=\"ace-icon fa fa-trash-o bigger-120\"></i></button>");
+                botaoExcluir.attr("data-referencia-id", item.referencia_id);
+                botaoExcluir.attr("data-servico-id", item.servico_ProdID);
+
+                botaoExcluir.click(function () {
+                    var referenciaId = $(this).attr("data-referencia-id");
+                    var servicoId = $(this).attr("data-servico-id");
+                    RemoveServOS(referenciaId, servicoId);
+                }); */
+
+              /*   var colunaExcluir = $("<td></td>").append(botaoExcluir); */
+
+                linha_os.append(colunaDescricao_os, colunaTipo_os, colunaQuantidade_os, colunaValorUnitario_os, colunaValorTotal);
+            }
+
+            tabelaItens_os.append(linha_os);
+            totalGeral += valorTotal;
+        }
+
+        // Adicionar a linha do total geral abaixo da tabela
+        var linhaTotalGeral = $("<tr style=\"background-color:#ddd\"></tr>");
+        var colunaTotalGeral = $("<td></td>").attr("colspan", "4").text("Total Geral:");
+        var colunaValorTotalGeral = $("<td></td>").text(formatarValorEmReais(totalGeral));
+        linhaTotalGeral.append(colunaTotalGeral, colunaValorTotalGeral);
+        tabelaItens_os.append(linhaTotalGeral);
+    } else {
+        $("#div_listagem_itens_os").hide();
+    }
+}
+function formatarValorEmReais(valor) {
+    const formatter = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    });
+    return formatter.format(valor);
+}
+
+
+
+function c()
+{
+
+}
+
+
+function FiltrarSetor(nome_filtro) {
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("setor_dataview"),
+        data: {
+            btnFiltrar: 'ajx',
+            FiltrarNome: nome_filtro
+        }, success: function (dados) {
+            $("#table_result_Setor").html(dados);
+        }
+    })
 }

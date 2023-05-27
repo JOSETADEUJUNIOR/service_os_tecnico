@@ -30,7 +30,7 @@ function ExcluirModal(id, nome) {
     $("#ExcluirNome").html(nome);
 
 }
-function ModalMais(data_atendimento, data_encerramento = "", tec_atendimento = "", tec_encerramento = "", laudotec) {
+function ModalMais(id, data_abertura, numero_nf, data_atendimento, data_encerramento = "", tec_atendimento = "", tec_encerramento = "", laudotec) {
 
     $("#dt_atendimento").val(data_atendimento);
     $("#dt_encerramento").val(data_encerramento);
@@ -42,6 +42,20 @@ function ModalMais(data_atendimento, data_encerramento = "", tec_atendimento = "
         console.log('não tem');
         $("#laudo").val("não há dados");
     }
+    alert(id);
+    $("#nf").html("#"+ numero_nf);
+    $("#OsID").val(id); 
+    $("#data_abertura").html(data_abertura); 
+    CarregarProdutosOS(id);
+}
+
+function CarregarDadosOS(id, data_abertura, numero_nf)
+{   alert(id);
+    $("#nf").html("#"+ numero_nf);
+    $("#OsID").val(id); 
+    $("#data_abertura").html(data_abertura); 
+    CarregarProdutosOS(id);
+   ;
 }
 function ModalFinalizaChamado(id, idAlocado, data_atendimento, tec_atendimento, laudo = "") {
     $("#id_chamado_finalizado").val(id);
@@ -193,9 +207,9 @@ function Sair() {
     location = "login.php";
 }
 
-function CarregarAtendimentoModal(id, equipamento) {
+function CarregarAtendimentoModal(id, numero_nf) {
     $("#id_chamado").val(id);
-    $("#equipamento_atender").html(equipamento);
+    $("#equipamento_atender").html(numero_nf);
 }
 
 
