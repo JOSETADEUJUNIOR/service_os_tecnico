@@ -110,12 +110,12 @@
 		}
 	</script> -->
 	<script>
-	$(document).ready(function() {
-			setInterval(function() { //Quando o documento estiver pronto, dê um setinvertal em Redireciona()
-					Redireciona();
-				}, 600000 //o setInterval será executado a cada 5 segundo, igual a 5000
-			)
-		});
+	const eventSource = new EventSource('/sse.php');
+	eventSource.addEventListener('horario', e=>{
+		console.log(e);
+
+		document.getElementById('sse').innerHTML = e.data;
+	});
 	</script>
 
 </body>
