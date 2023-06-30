@@ -95,6 +95,14 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
             <b class="arrow"></b>
         </li>
+        <li class="">
+            <a href="listar_lote.php">
+                <i class="menu-icon fa fa-envelope"></i>
+                <span class="menu-text"> Lotes </span>
+            </a>
+
+            <b class="arrow"></b>
+        </li>
 
 
 

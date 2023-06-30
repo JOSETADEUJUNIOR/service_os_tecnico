@@ -9,7 +9,6 @@ function RemoverLoad() {
 }
 
 function AlterarSetorModal(id, nome) {
-    alert(id, nome)
     $("#AlteraID").val(id);
     $("#nome").val(nome);
 }
@@ -42,7 +41,6 @@ function ModalMais(id, data_abertura, numero_nf, data_atendimento, data_encerram
         console.log('não tem');
         $("#laudo").val("não há dados");
     }
-    alert(id);
     $("#nf").html("#"+ numero_nf);
     $("#OsID").val(id); 
     $("#data_abertura").html(data_abertura); 
@@ -50,8 +48,7 @@ function ModalMais(id, data_abertura, numero_nf, data_atendimento, data_encerram
 }
 
 function CarregarDadosOS(id, data_abertura, numero_nf)
-{   alert(id);
-    $("#nf").html("#"+ numero_nf);
+{   $("#nf").html("#"+ numero_nf);
     $("#OsID").val(id); 
     $("#data_abertura").html(data_abertura); 
     CarregarProdutosOS(id);
