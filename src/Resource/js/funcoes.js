@@ -16,6 +16,11 @@ function AlterarModeloModal(id, nome) {
     $("#AlteraID").val(id);
     $("#nome").val(nome);
 }
+
+function CarregarInsumosServLote(){
+    
+}
+
 function AlterarEquipamentoModal(id, nomeTipo, nomeModelo, identificacao, descricao) {
     $("#idEquip").val(id);
     $("#tipo").val(nomeTipo);
@@ -47,11 +52,27 @@ function ModalMais(id, data_abertura, numero_nf, data_atendimento, data_encerram
     CarregarProdutosOS(id);
 }
 
-function CarregarDadosOS(id, data_abertura, numero_nf)
+/* function CarregarDadosOS(id, data_abertura, numero_nf)
 {   $("#nf").html("#"+ numero_nf);
     $("#OsID").val(id); 
     $("#data_abertura").html(data_abertura); 
     CarregarProdutosOS(id);
+   ;
+} */
+
+function CarregarDadosLote(id_lote_equip, equipamento_id, descricao, numero_lote, lote_id)
+{  
+    alert(lote_id); 
+    $("#id_lote_equip_dados").val(id_lote_equip);
+    $("#id_equipamento").val(equipamento_id); 
+    $("#loteID").val(lote_id); 
+    $("#numero_lote_dados").html(numero_lote); 
+    $("#equipamento_dados").html(descricao); 
+    ListarProdutos(equipamento_id);
+    ListarServicos(equipamento_id);
+    CarregarProdutosOS(id_lote_equip);
+    CarregarServicosOS(id_lote_equip);
+   
    ;
 }
 function ModalFinalizaChamado(id, idAlocado, data_atendimento, tec_atendimento, laudo = "") {
@@ -209,5 +230,14 @@ function CarregarAtendimentoModal(id, numero_nf) {
     $("#equipamento_atender").html(numero_nf);
 }
 
+function exibirDataBr(data) {
+    if (data == null || data == "") {
+        return "";
+    } else {
+        var dataArray = data.split('-');
+        var dataBr = dataArray[2] + '/' + dataArray[1] + '/' + dataArray[0];
+        return dataBr;
+    }
+}
 
 

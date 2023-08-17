@@ -56,19 +56,19 @@
 											<input type="search" onkeyup="FiltrarLote(this.value)" class="form-control input-sm" placeholder="buscar por numero de lote" aria-controls="dynamic-table">
 										</div>
 										<label style="margin-left:10px">
-											<input name="form-field-radio" id="CheckFuncionario" onclick="FiltrarChamado('4')" type="radio" class="ace" checked>
+											<input name="form-field-radio" id="CheckTodos" onclick="FiltrarLote($('#dynamic-table_filter input').val(), '');" type="radio" class="ace" checked value="todos">
 											<span class="lbl"> Todos</span>
 										</label>
 										<label style="margin-left:10px">
-											<input name="form-field-radio" id="CheckTecnico" onclick="FiltrarChamado('1')" type="radio" class="ace">
-											<span class="lbl"> Em aberto</span>
+											<input name="form-field-radio" id="CheckAtivos" onclick="FiltrarLote($('#dynamic-table_filter input').val(), 'A');" type="radio" class="ace" checked>
+											<span class="lbl"> Ativos</span>
 										</label>
 										<label style="margin-left:10px">
-											<input name="form-field-radio" id="CheckTecnico" onclick="FiltrarChamado('2')" type="radio" class="ace">
-											<span class="lbl"> Em atendimento</span>
+											<input name="form-field-radio" id="CheckInativos" onclick="FiltrarLote($('#dynamic-table_filter input').val(), 'N');" type="radio" class="ace">
+											<span class="lbl"> Inativos</span>
 										</label>
 										<label style="margin-left:10px">
-											<input name="form-field-radio" id="CheckTecnico" onclick="FiltrarChamado('3')" type="radio" class="ace">
+											<input name="form-field-radio" id="CheckEncerrados" onclick="FiltrarLote($('#dynamic-table_filter input').val(), 'E');" type="radio" class="ace">
 											<span class="lbl"> Encerrados</span>
 										</label>
 									</div>
@@ -77,8 +77,10 @@
 
 										</table>
 									</div>
+
 									<?php
 									include_once 'modal/_lote.php';
+									include_once 'modal/_dadosLote.php';
 									?>
 								</div>
 							</div>
@@ -90,7 +92,7 @@
 				</div>
 			</div>
 		</div><!-- /.main-content -->
-
+	
 		<?php include_once PATH_URL . './Template/_includes/_footer.php' ?>
 	</div><!-- /.final do conteudo Princial -->
 
@@ -101,6 +103,9 @@
 		Verify();
 		FiltrarLote();
 		CarregarEquipamento();
+		CarregarProdutosOS(3);
+		ListarProdutos();
+		ListarServicos();
 		
 	</script>
 	<!-- <script>
@@ -111,7 +116,7 @@
 		}
 	</script> -->
 	<script>
-	
+
 	</script>
 
 </body>

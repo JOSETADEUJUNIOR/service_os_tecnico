@@ -46,6 +46,9 @@
 
 							<div class="row">
 								<div class="col-xs-12">
+								<h4 class="pink">
+										<a href="#novoChamado" role="button" class="btn btn-success" data-toggle="modal"><i class="ace-icon fa fa-plus white"></i>Novo</a>
+									</h4>
 									<div class="table-header">
 										Ordem de serviço Realizada
 
@@ -90,7 +93,10 @@
 				</div>
 			</div>
 		</div><!-- /.main-content -->
+		<form id="form_chamado" action="chamados.php" method="post">
+				<?php include_once 'modal/_novo_chamado.php' ?>
 
+			</form>
 		<?php include_once PATH_URL . './Template/_includes/_footer.php' ?>
 	</div><!-- /.final do conteudo Princial -->
 
@@ -100,7 +106,10 @@
 	<script>
 		Verify();
 		FiltrarChamado();
-		
+		CarregarClientes();
+		$("#btn-toggle-div").click(function() {
+			$("#div-produtos").toggle();
+		});
 	</script>
 	<!-- <script>
 		if ($("#verMais").is(":visible")) {

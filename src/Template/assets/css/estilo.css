@@ -1,3 +1,6 @@
 .ocultar{
     display: none;
 }
+.campo-vazio {
+    background-color: #ffcccc; /* Cor de fundo vermelha */
+}

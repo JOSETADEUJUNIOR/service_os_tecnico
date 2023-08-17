@@ -103,9 +103,7 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
             <b class="arrow"></b>
         </li>
-
-
-
+       
     </ul><!-- /.nav-list -->
 
     <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">

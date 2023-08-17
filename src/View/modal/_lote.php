@@ -16,7 +16,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Data do lote</label>
-                            <input type="date" class="form-control obg" id="numero_lote" value="<?= date("Y-m-d")?>" name="numero_lote" placeholder="Digite o aqui....">
+                            <input type="date" class="form-control obg" id="data_lote" value="<?= date("Y-m-d")?>" name="data_lote" placeholder="Digite o aqui....">
                         </div>
                     </div>
                     

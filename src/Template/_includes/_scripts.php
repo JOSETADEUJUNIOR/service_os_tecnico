@@ -14,6 +14,9 @@
 		<![endif]-->
 <script src="../Template/assets/js/jquery-ui.custom.min.js"></script>
 <script src="../Template/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="../Template/assets/js/jquery.dataTables.min.js"></script>
+<script src="../Template/assets/js/jquery.dataTables.bootstrap.min.js"></script>
+<script src="../Template/assets/js/dataTables.buttons.min.js"></script>
 <script src="../Template/assets/js/jquery.easypiechart.min.js"></script>
 <script src="../Template/assets/js/jquery.sparkline.index.min.js"></script>
 <script src="../Template/assets/js/jquery.flot.min.js"></script>
@@ -32,3 +35,7 @@
 <!-- ace scripts -->
 <script src="../Template/assets/js/ace-elements.min.js"></script>
 <script src="../Template/assets/js/ace.min.js"></script>
+
+
+
+		
