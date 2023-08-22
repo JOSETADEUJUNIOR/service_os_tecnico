@@ -34,7 +34,7 @@ function ExcluirModal(id, nome) {
     $("#ExcluirNome").html(nome);
 
 }
-function ModalMais(id, data_abertura, numero_nf, data_atendimento, data_encerramento = "", tec_atendimento = "", tec_encerramento = "", laudotec) {
+function ModalMais(id, LoteID, data_abertura, numero_nf, data_atendimento, data_encerramento = "", tec_atendimento = "", tec_encerramento = "", laudotec) {
 
     $("#dt_atendimento").val(data_atendimento);
     $("#dt_encerramento").val(data_encerramento);
@@ -50,6 +50,14 @@ function ModalMais(id, data_abertura, numero_nf, data_atendimento, data_encerram
     $("#OsID").val(id); 
     $("#data_abertura").html(data_abertura); 
     CarregarProdutosOS(id);
+    if (LoteID>0) {
+        alert('não nulo');
+        RetornarEquipamentosLote(LoteID);
+        
+    }else if (LoteID ==null) {
+        alert('nulo');
+        RetornarEquipamentosLote(0);
+    }
 }
 
 /* function CarregarDadosOS(id, data_abertura, numero_nf)

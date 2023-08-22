@@ -63,7 +63,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 col-xs-12" id="div_listagem_itens_os" style="display:none">
+                        <div class="col-md-12 col-xs-12" id="div_listagem_itens_os" style="display:block">
                     <h3 class="widget-title grey lighter">
                             <i class="ace-icon fa fa-list green"></i>
                             Produtos e serviços adicionados na ordem de serviço

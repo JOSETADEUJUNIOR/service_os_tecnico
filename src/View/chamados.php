@@ -8,6 +8,39 @@
 	<?php include_once PATH_URL . '/Template/_includes/_head.php' ?>
 
 	<meta name="description" content="Static &amp; Dynamic Tables" />
+	<head>
+  
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</head>
+	
+<style>
+	/* Estilo para a tabela */
+
+/* Estilo para as células das colunas */
+.custom-table-style th, .custom-table-style td {
+    /* Impede que o conteúdo seja quebrado em várias linhas */
+    overflow: hidden; /* Oculta o conteúdo que transborda */
+    text-overflow: ellipsis; /* Adiciona reticências quando o conteúdo transborda */
+	width: auto;
+}
+
+/* Estilo para os controles de paginação */
+.custom-table-style .dataTables_paginate {
+    text-align: center; /* Centraliza os controles de paginação */
+}
+
+/* Estilo para a mensagem de informações sobre a página atual */
+.custom-table-style .dataTables_info {
+    float: left; /* Alinha à esquerda */
+    margin-top: 10px; /* Espaçamento superior */
+}
+
+.dataTables_wrapper .row:first-child {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #2C6AA0;
+}
+</style>
 
 </head>
 
@@ -107,6 +140,7 @@
 		Verify();
 		FiltrarChamado();
 		CarregarClientes();
+		CarregarLote();
 		$("#btn-toggle-div").click(function() {
 			$("#div-produtos").toggle();
 		});

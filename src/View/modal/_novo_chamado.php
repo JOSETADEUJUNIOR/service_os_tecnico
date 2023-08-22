@@ -28,6 +28,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-12 col-xs-12">
+                        <input type="hidden" name="idLoteOs" id="idLoteOs">
+                        <div class="form-group">
+                            <label>Escolha o Lote</label>
+                            <select class="form-control" id="lote" name="lote">
+
+                            </select>
+                        </div>
+                    </div>
                     <!--  <div class="col-md-12">
                         <input type="hidden" name="idProduto" id="idProduto">
                         <div class="form-group">
@@ -60,7 +69,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" id="btnCancelar" onclick="FechandoModal('form_chamado')" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-                <button name="btnGravar" class="btn btn-success" onclick="return AbrirChamado()">Salvar</button>
+                <button name="btnGravar" class="btn btn-success" onclick="return AbrirChamado('form_chamado')">Salvar</button>
             </div>
         </div>
         <!-- /.modal-content -->

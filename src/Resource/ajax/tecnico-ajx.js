@@ -227,6 +227,114 @@ function AtenderChamado() {
 
 }
 
+
+function divideEmPaginas(dados, registrosPorPagina) {
+    var paginas = [];
+    for (var i = 0; i < dados.length; i += registrosPorPagina) {
+        paginas.push(dados.slice(i, i + registrosPorPagina));
+    }
+    return paginas;
+}
+
+var paginas = []; // Array de páginas
+
+// Função para avançar para a próxima página
+function proximaPagina() {
+    if (paginaAtual < paginas.length - 1) {
+        paginaAtual++;
+        renderizarPagina(paginaAtual);
+    }
+}
+
+// Função para voltar para a página anterior
+function paginaAnterior() {
+    if (paginaAtual > 0) {
+        paginaAtual--;
+        renderizarPagina(paginaAtual);
+    }
+}
+
+paginas = divideEmPaginas(dados, registrosPorPagina);
+
+// Renderize a página inicial
+renderizarPagina(paginaAtual);
+
+
+function RetornarEquipamentosLote(LoteID) {
+
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    var dados = {
+        LoteID: LoteID,
+        endpoint: 'RetornarEquipamentosLoteAPI',
+        empresa_id: dadosAPI.empresa_id
+    };
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret['result'];
+            console.log("EquipLote:" + resultado);
+
+            if (resultado) {
+                let registrosPorPagina = 10;
+                let paginaAtual = 0;
+                let paginas = divideEmPaginas(resultado, registrosPorPagina);
+
+                function renderizarPagina(pagina) {
+                    let tabelaHTML = '';
+                    let valor_total = 0;
+                    for (let i = 0; i < pagina.length; i++) {
+                        let registro = pagina[i];
+                        valor_total += valor_total + registro.total_geral;
+                        tabelaHTML += '<tr>';
+                        tabelaHTML += '<td>' + registro.lote_id + '</td>';
+                        tabelaHTML += '<td>' + registro.descricao + '</td>';
+                        tabelaHTML += '<td>' + registro.numero_serie_equipamento + '</td>';
+                        tabelaHTML += '<td>' + registro.versao + '</td>';
+                        tabelaHTML += '<td>' + registro.servicos_nome + '</td>';
+                        tabelaHTML += '<td>' + registro.insumos_nome + '</td>';
+                        tabelaHTML += '<td>' + registro.total_geral + '</td>';
+                        tabelaHTML += '</tr>';
+                    }
+                    $("#dynamic-table-equipamentos-lote tbody").html(tabelaHTML);
+                    $("#total_geral").html(valor_total);
+                }
+
+                $("#pagina-anterior").click(function () {
+                    event.preventDefault(); // Evita o comportamento padrão do clique do botão
+                    if (paginaAtual > 0) {
+                        paginaAtual--;
+                        renderizarPagina(paginas[paginaAtual]);
+                    }
+                });
+
+                $("#proxima-pagina").click(function () {
+                    event.preventDefault(); // Evita o comportamento padrão do clique do botão
+                    if (paginaAtual < paginas.length - 1) {
+                        paginaAtual++;
+                        renderizarPagina(paginas[paginaAtual]);
+                    }
+                });
+
+                renderizarPagina(paginas[paginaAtual]);
+            } else {
+                MensagemGenerica("Nenhum dado encontrado");
+                $("#dynamic-table").html('');
+            }
+        }
+    });
+}
+
+
+
 function FiltrarChamado(situacao = 4) {
 
     let filtro_chamado = situacao;
@@ -271,7 +379,7 @@ function FiltrarChamado(situacao = 4) {
                 table_head += '<th>Ação</th>';
                 table_head += '<th>NF</th>';
                 table_head += '<th>Data Abertura</th>';
-                table_head += '<th>Funcionário</th>';
+                table_head += '<th>Técnico</th>';
                 table_head += '<th>Status</th>';
                 table_head += '<th>Problema</th>';
                 table_head += '</tr></thead><tbody>';
@@ -290,7 +398,7 @@ function FiltrarChamado(situacao = 4) {
 
 
 
-                    table_data += '<button type="button" class="btn btn-info" onclick="ModalMais(' + "'" + this.id + "'" + ',' + "'" + this.data_abertura + "'" + ',' + "'" + this.numero_nf + "'" + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + (this.data_encerramento != null ? this.data_encerramento : '') + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.tecnico_encerramento != null ? this.tecnico_encerramento : '') + "'" + ',' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : 'sem laudo') + "'" + ')" data-toggle="modal" data-target="#verMais"><i class="ace-icon fa fa-info  align-top bigger-125 icon-on-right"></i></button>';
+                    table_data += '<button type="button" class="btn btn-info" onclick="ModalMais(' + "'" + this.id + "'" + ',' + "'" + this.LoteID + "'" + ',' + "'" + this.data_abertura + "'" + ',' + "'" + this.numero_nf + "'" + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + (this.data_encerramento != null ? this.data_encerramento : '') + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.tecnico_encerramento != null ? this.tecnico_encerramento : '') + "'" + ',' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : 'sem laudo') + "'" + ')" data-toggle="modal" data-target="#verMais"><i class="ace-icon fa fa-info  align-top bigger-125 icon-on-right"></i></button>';
 
 
                     table_data += '</td>';
@@ -298,14 +406,14 @@ function FiltrarChamado(situacao = 4) {
                     if (this.data_atendimento == null) {
                         table_data += '<button type="button" class="btn btn-xs btn-purple" onclick="CarregarAtendimentoModal(' + this.id + ', ' + "'" + this.numero_nf + "'" + ')" data-toggle="modal" data-target="#modal-status" ><i class="ace-icon fa fa-bolt bigger-110"></i>Atender<i class="ace-icon fa fa-arrow-right icon-on-right"></i></button>';
                     } else if (this.data_atendimento != null && this.data_encerramento == null) {
-                        table_data += '<button type="button" onclick="ModalFinalizaChamado(' + this.id + ',' + this.idAlocado + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : '') + "'" + ')" data-toggle="modal" data-target="#finalizarChamado" class="btn btn-xs btn-success">Encerrar<i title="Encerrar" class="ace-icon fa fa-share bigger-110"></i></button>';
+                        table_data += '<button type="button" onclick="ModalFinalizaChamado(' + this.id + ',' + this.idAlocado + ',' + "'" + this.data_atendimento + "'" + ', ' + "'" + this.nome_tecnico + "'" + ', ' + "'" + (this.laudo_tecnico != null ? this.laudo_tecnico : '') + "'" + ')" data-toggle="modal" data-target="#finalizarChamado" class="btn btn-xs btn-success">Encerrar<i title="" class="ace-icon fa fa-share bigger-110"></i></button>';
                     } else if (this.data_encerramento != null) {
                         table_data += '<span class="label label-danger arrowed-in">Encerrado</span>';
                     }
                     table_data += '</td>';
                     table_data += '<td>' + this.numero_nf + '</td>';
                     table_data += '<td>' + this.data_abertura + '</td>';
-                    table_data += '<td>' + this.nome_funcionario + '</td>';
+                    table_data += '<td>' + this.nome_tecnico + '</td>';
                     table_data += '<td>' + status + '</td>';
                     table_data += '<td>' + this.descricao_problema + '</td>';
                     table_data += '</tr>';
@@ -762,7 +870,7 @@ function FiltrarEquipamentoLote() {// tela de equipamentos do lote
                     tableHTML += '<tbody>';
                     var startIndex = (currentPage - 1) * pageSize;
                     $(dados).each(function (index) {
-                        var equipmentNumber = startIndex + index + 1; 
+                        var equipmentNumber = startIndex + index + 1;
                         tableHTML += '<tr>';
                         tableHTML += '<td>' + equipmentNumber + '</td>';
                         tableHTML += '<td>' + this.identificacao + '</td>';
@@ -784,7 +892,7 @@ function FiltrarEquipamentoLote() {// tela de equipamentos do lote
                     $("#dynamic-tables_lotes").html(tableHTML);
                 }
 
-               
+
 
                 // Função para exibir os dados da página atual
                 function exibirPaginaAtual() {
@@ -964,7 +1072,7 @@ function CarregarClientes() {
         tipo: dadosAPI.tipo,
         empresa_id: dadosAPI.empresa_id,
         endpoint: endpoint_clientes,
-       
+
     }
     $.ajax({
         type: "POST",
@@ -976,7 +1084,7 @@ function CarregarClientes() {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            console.log("cliente:"+resultado);
+            console.log("cliente:" + resultado);
             $('<option>').val("").text("Selecione").appendTo(combo_clientes);
 
             $(resultado).each(function () {
@@ -988,24 +1096,64 @@ function CarregarClientes() {
     return false;
 }
 
-function AbrirChamado() {
+function CarregarLote() {
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
     }
+    var combo_lote = $("#lote");
+    combo_lote.empty();
+    var endpoint_lote = "RetornaLoteAPI";
+    var dados = {
+        tipo: dadosAPI.tipo,
+        empresa_id: dadosAPI.empresa_id,
+        endpoint: endpoint_lote,
+
+    }
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret["result"];
+            console.log("lotes:" + resultado);
+            $('<option>').val("").text("Selecione").appendTo(combo_lote);
+
+            $(resultado).each(function () {
+
+                $('<option>').val(this.id).text(this.numero_lote).appendTo(combo_lote);
+            })
+        }
+    })
+    return false;
+}
+
+function AbrirChamado(id_form) {
    
-        console.log("Log:"+$("#cliente").val());
-        var id_user_func = dadosAPI.tecnico_id;
-        var id_emp_func = dadosAPI.empresa_id;
+        var dadosAPI = GetTnkValue();
+        if (!dadosAPI.tecnico_id) {
+            Sair();
+        }
+
+        console.log("LoteCarregado:" + $("#lote").val());
+        var id_user_tec = dadosAPI.tecnico_id;
+        var id_emp_tec = dadosAPI.empresa_id;
+        console.log(id_user_tec);
+        console.log(id_emp_tec);
         var dados = {
             endpoint: "AbrirChamado",
-            id_user: id_user_func,
-            empresa_id: id_emp_func,
+            id_user: id_user_tec,
+            empresa_id: id_emp_tec,
             numero_nf: $("#numero_nf").val(),
             cliente_id: $("#cliente").val(),
             problema: $("#descricao_problema").val().trim(),
             defeito: $("#defeito").val().trim(),
-            observacao: $("#observacao").val().trim()
+            observacao: $("#observacao").val().trim(),
+            lote: $("#lote").val()
 
         }
 
@@ -1023,19 +1171,23 @@ function AbrirChamado() {
                 console.log(resultado);
                 /* $("#novoChamado").modal("hide"); */
                 if (resultado == '1') {
-                   console.log('volto:'+resultado);
+                    MensagemSucesso();
+                    FiltrarChamado();
+                    $("#novoChamado").modal('hide');
+                } else {
+                    MensagemErro();
                 }
             }
 
 
         })
-
-   return false;
+    
+    return false;
 
 }
 
 
-function FiltrarLote(val, status='A') {
+function FiltrarLote(val, status = 'A') {
     console.log(val);
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
@@ -1757,4 +1909,8 @@ $("#btn-gravar-serv").click(function () {
 
 })
 
-
+function ImprimirLote() {
+    let filtrar_palavra = $("#buscaCliente").val();
+    url = "relatorio_lote.php?desc_filtro=" + encodeURIComponent(filtrar_palavra);
+    window.open(url, "_blank");
+}
