@@ -87,25 +87,26 @@
                                         <tbody>
                                             <!-- As linhas dos itens serão adicionadas aqui dinamicamente -->
                                         </tbody>
-                                       
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="6" style="text-align: right;"><strong></strong></td>
+                                                <td id="total_geral">0</td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                     <div id="botoes-paginacao" style="text-align:center;">
                                         <button class="btn btn-info btn-sm" id="pagina-anterior">Anterior</button>
                                         <button class="btn btn-info btn-sm" id="proxima-pagina">Próxima</button>
                                     </div>
                                 </div>
-                                <div>
-                                        <span id="total_geral" style="text-align:right;"><strong>Total Geral:</strong></span>
-                                        
-                                    
-                                </div>
+
                             </div>
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" id="btnCancelar" onclick="FechandoModal('form_chamado')" class="btn btn-info" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnCancelar" onclick="FechandoModal('form_chamado_lote')" class="btn btn-info" data-dismiss="modal">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -138,3 +139,4 @@ function renderizarDados(dados) {
 
 
 </script>
+

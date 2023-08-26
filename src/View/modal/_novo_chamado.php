@@ -16,7 +16,7 @@
                     <div class="col-md-6 col-xs-12">
                         <div class="form-group">
                             <label>Data abertura</label>
-                            <input class="form-control" type="date" id="data_abertura" name="data_abertura" value="<?= date('Y-m-d') ?>" disabled>
+                            <input class="form-control" type="date" id="data_abertura" name="data_abertura" value="<?= date('Y-m-d') ?>">
                         </div>
                     </div>
                     <div class="col-md-12 col-xs-12">

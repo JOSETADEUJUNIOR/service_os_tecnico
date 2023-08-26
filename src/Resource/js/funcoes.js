@@ -50,14 +50,8 @@ function ModalMais(id, LoteID, data_abertura, numero_nf, data_atendimento, data_
     $("#OsID").val(id); 
     $("#data_abertura").html(data_abertura); 
     CarregarProdutosOS(id);
-    if (LoteID>0) {
-        alert('não nulo');
-        RetornarEquipamentosLote(LoteID);
-        
-    }else if (LoteID ==null) {
-        alert('nulo');
-        RetornarEquipamentosLote(0);
-    }
+    RetornarEquipamentosLote(LoteID);
+    
 }
 
 /* function CarregarDadosOS(id, data_abertura, numero_nf)
@@ -116,6 +110,7 @@ function AlterarTipoEquipamentoModal(id, nome) {
 
 function FechandoModal(form_id) {
     LimparCampos(form_id)
+    RetornarEquipamentosLote(0);
 }
 
 

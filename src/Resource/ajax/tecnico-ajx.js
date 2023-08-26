@@ -246,6 +246,29 @@ function proximaPagina() {
     }
 }
 
+ $('#verMais').on('hidden.bs.modal', function (e) {
+    // Limpar os campos do modal e redefinir qualquer estado que precisa ser resetado
+    $("#dt_atendimento").val('');
+    $("#dt_encerramento").val('');
+    $("#tec_atendimento").val('');
+    $("#tec_encerramento").val('');
+    $("#laudo").val('');
+    $("#nf").html('');
+    $("#OsID").val('');
+    $("#data_abertura").html('');
+
+    // Limpar a tabela de equipamentos ou outros elementos que precisam ser resetados
+    $("#dynamic-table-equipamentos-lote tbody").html('');
+
+    // Limpar o rodapé com o total geral ou outros elementos relacionados
+    $("#total_geral").html('');
+    
+    // Remover eventuais classes ou estilos adicionados durante a interação com o modal
+    // Por exemplo, se você adicionou classes de destaque, pode removê-las aqui
+
+    // ... outras ações de reset que você precisa realizar ...
+});
+
 // Função para voltar para a página anterior
 function paginaAnterior() {
     if (paginaAtual > 0) {
@@ -261,7 +284,6 @@ renderizarPagina(paginaAtual);
 
 
 function RetornarEquipamentosLote(LoteID) {
-
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
@@ -291,21 +313,28 @@ function RetornarEquipamentosLote(LoteID) {
                 function renderizarPagina(pagina) {
                     let tabelaHTML = '';
                     let valor_total = 0;
+                    let valorTotalGeral = 0;
+                    let valor_total_insumos = 0;
+                    let valor_total_servicos = 0;
                     for (let i = 0; i < pagina.length; i++) {
                         let registro = pagina[i];
-                        valor_total += valor_total + registro.total_geral;
+                        valor_total += registro.total_geral;
+                        valor_total_insumos +=
+                        valor_total_servicos +=
                         tabelaHTML += '<tr>';
                         tabelaHTML += '<td>' + registro.lote_id + '</td>';
                         tabelaHTML += '<td>' + registro.descricao + '</td>';
                         tabelaHTML += '<td>' + registro.numero_serie_equipamento + '</td>';
                         tabelaHTML += '<td>' + registro.versao + '</td>';
-                        tabelaHTML += '<td>' + registro.servicos_nome + '</td>';
                         tabelaHTML += '<td>' + registro.insumos_nome + '</td>';
+                        tabelaHTML += '<td>' + registro.servicos_nome + '</td>';
                         tabelaHTML += '<td>' + registro.total_geral + '</td>';
                         tabelaHTML += '</tr>';
+                        valorTotalGeral += parseFloat(registro.total_geral || 0); 
                     }
+                    console.log("TotalGeral:"+valorTotalGeral);
                     $("#dynamic-table-equipamentos-lote tbody").html(tabelaHTML);
-                    $("#total_geral").html(valor_total);
+                    $("#total_geral").html("<strong>Total Geral:</strong> " + valorTotalGeral.toFixed(2)); 
                 }
 
                 $("#pagina-anterior").click(function () {
@@ -806,7 +835,8 @@ function EncerrarLote() {
                 if (resultado == '1') {
                     MensagemSucesso();
                     FiltrarLote();
-                    $("#lote").modal('hide');
+                    window.location.href = "listar_lote.php";
+                    $("#search_lote").val(444);
                 } else {
                     MensagemErro();
                 }
@@ -817,7 +847,10 @@ function EncerrarLote() {
         return false;
     }
 }
-function FiltrarEquipamentoLote() {// tela de equipamentos do lote
+
+
+
+function FiltrarEquipamentoLote() {
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
@@ -848,117 +881,70 @@ function FiltrarEquipamentoLote() {// tela de equipamentos do lote
             }
 
             if (resultado.length > 0) {
-                var pageSize = 10; // Quantidade de registros por página
-                var currentPage = 1; // Página atual (inicialmente a primeira)
-                var idEquip = this.equipamento_id;
-                console.log("cod:", idEquip);
+                // Criar a estrutura da tabela
+                var tableHTML = '<table class="table table-hover" id="dynamic-table">';
+                tableHTML += '<thead>';
+                tableHTML += '<tr>';
+                tableHTML += '<th>Equipamento</th>';
+                tableHTML += '<th>Número de Série</th>';
+                tableHTML += '<th>Versão</th>';
+                tableHTML += '<th>Qtd Insumo</th>';
+                tableHTML += '<th>Qtd Serviços</th>';
+                tableHTML += '<th>Ações</th>';
+                tableHTML += '</tr>';
+                tableHTML += '</thead>';
+                tableHTML += '<tbody>';
 
-                // Função para renderizar os dados na tabela
-                function renderizarDados(dados, currentPage) {
-                    var tableHTML = '<table class="table table-hover" id="dynamic-tables_lotes">';
-                    tableHTML += '<thead>';
+                // Adicionar os dados à tabela
+                $(resultado).each(function () {
                     tableHTML += '<tr>';
-                    tableHTML += '<th>#</th>';
-                    tableHTML += '<th>Equipamento</th>';
-                    tableHTML += '<th>Número de Série</th>';
-                    tableHTML += '<th>Versão</th>';
-                    tableHTML += '<th>Qtd Insumo</th>'; // Nova coluna
-                    tableHTML += '<th>Qtd Serviços</th>';
-                    tableHTML += '<th>Ações</th>';
-                    tableHTML += '</tr>';
-                    tableHTML += '</thead>';
-                    tableHTML += '<tbody>';
-                    var startIndex = (currentPage - 1) * pageSize;
-                    $(dados).each(function (index) {
-                        var equipmentNumber = startIndex + index + 1;
-                        tableHTML += '<tr>';
-                        tableHTML += '<td>' + equipmentNumber + '</td>';
-                        tableHTML += '<td>' + this.identificacao + '</td>';
-                        tableHTML += '<td><input type="hidden" id="id_lote_equip" class="id_lote_equip" value="' + (this.id_lote_equip) + '"><input type="text" id="numero-serie" class="numero-serie" value="' + (this.numero_serie || '') + '" readonly></td>';
+                    tableHTML += '<td>' + this.identificacao + '</td>';
+                    tableHTML += '<td><input type="hidden" id="id_lote_equip" class="id_lote_equip" value="' + (this.id_lote_equip) + '"><input type="text" id="numero-serie" class="numero-serie" value="' + (this.numero_serie || '') + '" readonly></td>';
                         tableHTML += '<td><input type="text" id="versao" class="versao" value="' + (this.numero_versao || '') + '" readonly></td>';
-                        tableHTML += '<td>' + this.num_insumos + '</td>';
-                        tableHTML += '<td>' + this.num_servicos + '</td>';
-                        tableHTML += '<td><a href="#" class="green editar" title="inserir ñ serie e versão" data-equipamento-id="' + this.id_lote_equip + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a> ';
-                        tableHTML += '<a href="#" class="blue gravar" style="display: none;"><i class="ace-icon fa fa-save bigger-130"></i></a> ';
-                        tableHTML += '<a href="#dadosLote" role="button" data-toggle="modal" onclick="CarregarDadosLote(\'' + this.id_lote_equip + '\', \'' + this.equipamento_id + '\', \'' + this.identificacao + '\', \'' + this.numero_lote + '\', \'' + this.lote_id + '\')" class="blue abrir-modal" data-equipamento-id="' + this.id_lote_equip + '"><i class="ace-icon fa fa-search-plus bigger-130"></i></a></td>';
+                    tableHTML += '<td>' + this.num_insumos + '</td>';
+                    tableHTML += '<td>' + this.num_servicos + '</td>';
+                    tableHTML += '<td><a href="#" class="green editar" title="inserir ñ serie e versão" data-equipamento-id="' + this.id_lote_equip + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a> ';
+                    tableHTML += '<a href="#" class="blue gravar" style="display: none;"><i class="ace-icon fa fa-save bigger-130"></i></a> ';
+                    tableHTML += '<a href="#dadosLote" role="button" data-toggle="modal" onclick="CarregarDadosLote(\'' + this.id_lote_equip + '\', \'' + this.equipamento_id + '\', \'' + this.identificacao + '\', \'' + this.numero_lote + '\', \'' + this.lote_id + '\')" class="blue abrir-modal" data-equipamento-id="' + this.id_lote_equip + '"><i class="ace-icon fa fa-search-plus bigger-130"></i></a></td>';
+                    tableHTML += '</tr>';
+                });
 
+                tableHTML += '</tbody>';
+                tableHTML += '</table>';
 
-                        tableHTML += '</tr>';
+                // Atualizar o conteúdo da div com a tabela
+                $("#dynamic-table-container").html(tableHTML);
+
+                // Inicializar o DataTable
+                $('#dynamic-table').DataTable({
+                    pageLength: 10, // Número de itens por página
+                    paging: true, // Ativar paginação
+                    searching: true, // Ativar barra de pesquisa
+                    ordering: true, // Ativar ordenação
+                    responsive: true // Tornar a tabela responsiva
+                });
+
+               // Evento de clique no link "Editar"
+                    $(document).on("click", ".editar", function (e) {
+                        e.preventDefault();
+                        var tr = $(this).closest("tr");
+                        var numeroSerieInput = tr.find(".numero-serie"); // Seleciona o campo de número de série
+                        var versaoInput = tr.find(".versao"); // Seleciona o campo de versão
+                        
+                        numeroSerieInput.removeAttr("readonly");
+                        versaoInput.removeAttr("readonly");
+                        
+                        $(this).hide();
+                        tr.find(".gravar").show();
                     });
 
-                    tableHTML += '</tbody>';
-                    tableHTML += '</table>';
-
-                    $("#dynamic-tables_lotes").html(tableHTML);
-                }
-
-
-
-                // Função para exibir os dados da página atual
-                function exibirPaginaAtual() {
-                    var start = (currentPage - 1) * pageSize;
-                    var end = start + pageSize;
-                    var dadosPagina = resultado.slice(start, end);
-
-                    renderizarDados(dadosPagina, currentPage);
-                }
-
-                // Função para atualizar a exibição da tabela com base na página atual
-                function atualizarTabela(currentPage) {
-                    exibirPaginaAtual(currentPage);
-                    document.getElementById("current-page").textContent = currentPage; // Atualiza o número da página atual
-
-                    // Calcula as informações de exibição de entradas
-                    var startEntry = (currentPage - 1) * pageSize + 1;
-                    var endEntry = Math.min(startEntry + pageSize - 1, resultado.length);
-                    var totalEntries = resultado.length;
-
-                    var entriesInfo = "Mostrando " + startEntry + " a " + endEntry + " de " + totalEntries + " entradas";
-                    document.getElementById("entries-info").textContent = entriesInfo; // Atualiza a informação de exibição de entradas
-
-                    // ...
-                }
-
-                // Inicialize a tabela na primeira página
-                atualizarTabela(currentPage);
-
-                // Eventos de clique nos botões de páginação
-                $("#previous-page").click(function (e) {
-                    console.log("pagina anter:", currentPage);
-                    e.preventDefault();
-                    if (currentPage > 1) {
-                        currentPage--;
-                        atualizarTabela(currentPage);
-                    }
-                });
-
-                $("#next-page").click(function (e) {
-                    e.preventDefault();
-                    console.log("pagina proxima:", currentPage);
-                    var totalPages = Math.ceil(resultado.length / pageSize);
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                        atualizarTabela(currentPage);
-                    }
-                });
-
-                // Evento de clique no link "Editar"
-                $(document).on("click", ".editar", function (e) {
-                    e.preventDefault();
-                    var tr = $(this).closest("tr");
-                    tr.find(".numero-serie").removeAttr("readonly");
-                    tr.find(".versao").removeAttr("readonly");
-                    $(this).hide();
-                    tr.find(".gravar").show();
-                });
-
-                $(document).on("click", ".gravar", function (e) {
-                    e.preventDefault(); // Impede que a página seja recarregada
-                    var tr = $(this).closest("tr");
-                    var equipamentoId = $(this).data("equipamento-id");
-                    var id_lote_equip = tr.find("#id_lote_equip").val();
-                    var numeroSerie = tr.find(".numero-serie").val().trim();
-                    var versao = tr.find(".versao").val().trim();
+                    $(document).on("click", ".gravar", function (e) {
+                        e.preventDefault(); // Impede que a página seja recarregada
+                        var tr = $(this).closest("tr");
+                        var equipamentoId = $(this).data("equipamento-id");
+                        var id_lote_equip = tr.find("#id_lote_equip").val();
+                        var numeroSerie = tr.find(".numero-serie").val();
+                        var versao = tr.find(".versao").val();
 
                     if (!numeroSerie) {
                         MensagemGenerica("Campo numero de série é obrigatório", "warning");
@@ -970,7 +956,7 @@ function FiltrarEquipamentoLote() {// tela de equipamentos do lote
                         tr.find(".versao").focus();
                     } else {
                         // Chame a função para gravar os dados usando o equipamentoId, numeroSerie e versao
-                        GravarDadosEquipamento(id_lote_equip, numeroSerie, versao, currentPage);
+                        GravarDadosEquipamento(id_lote_equip, numeroSerie, versao);
 
                         // Depois de gravar os dados, desabilite os campos novamente
                         tr.find(".numero-serie").attr("readonly", true);
@@ -979,21 +965,55 @@ function FiltrarEquipamentoLote() {// tela de equipamentos do lote
                         tr.find(".editar").show();
                     }
                 });
-
             } else {
                 MensagemGenerica("Nenhum chamado encontrado");
-                $("#dynamic-tables_lotes").html('');
+                $("#dynamic-table-container").html('');
             }
         }
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //função para verificar se tem equipamento sem numero de serie e versão preenchidos
 
 function verificarCamposPreenchidos() {
     var todosPreenchidos = true;
 
-    $("#dynamic-tables_lotes tbody tr").each(function () {
+    $("#dynamic-table tbody tr").each(function () {
         var numeroSerie = $(this).find(".numero-serie");
         var versao = $(this).find(".versao");
 
@@ -1015,12 +1035,7 @@ function verificarCamposPreenchidos() {
 }
 
 
-function GravarDadosEquipamento(id_lote_equip, numeroSerie, versao, currentPage) {// grava os dados de numero de serie e versão do equipamento
-    console.log("paginal atual:", currentPage);
-    console.log("equipamentoId:", id_lote_equip);
-    console.log("numeroSerie:", numeroSerie);
-    console.log("versao:", versao);
-
+function GravarDadosEquipamento(id_lote_equip, numeroSerie, versao) {// grava os dados de numero de serie e versão do equipamento
     let dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
@@ -1045,7 +1060,6 @@ function GravarDadosEquipamento(id_lote_equip, numeroSerie, versao, currentPage)
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
             if (resultado == '1') {
-                MensagemSucesso();
                 FiltrarEquipamentoLote(currentPage);
                 $("#lote").modal('hide');
             } else {
@@ -1187,8 +1201,8 @@ function AbrirChamado(id_form) {
 }
 
 
-function FiltrarLote(val, status = 'A') {
-    console.log(val);
+function FiltrarLote(val, status) {
+    console.log(status);
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
@@ -1252,8 +1266,18 @@ function FiltrarLote(val, status = 'A') {
                         table_data += '</td>';
                         table_data += '<td>';
                         table_data += '<div class="hidden-sm hidden-xs action-buttons">';
-                        table_data += '<a class="blue insert-insumos" href="#" data-dt-criacao="' + dataCriacao + '" data-id-lote="' + this.id + '"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>';
-                        table_data += '<a class="red" href="#" onclick="inativarLote(\'' + this.id + '\', \'' + this.status + '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>';
+                        table_data += '<a id="print-button" href="#" onclick="PrintLote(\'' + this.id+ '\')" class="green"><i title="Imprir os dados do lote" class="ace-icon fa fa-file-excel-o bigger-130"></i></a>';
+                        table_data += '<a id="print-button-pdf" href="#" onclick="PrintLotePDF(\'' + this.id+ '\')" class="red"><i title="Imprir os dados do lote" class="ace-icon fa fa-file-pdf-o bigger-130"></i></a>';
+                       if (this.status=="A") {
+                           table_data += '<a class="blue insert-insumos" href="#" data-dt-criacao="' + dataCriacao + '" data-id-lote="' + this.id + '"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>';
+                           table_data += '<a class="red" href="#" onclick="inativarLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="Inativar o Lote" class="ace-icon fa fa-unlock bigger-130"></i></a>';
+                       }
+                       if (this.status=="E") {
+                          table_data += '<a class="red" href="#" onclick="ReabrirLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="Reabrir Lote" class="ace-icon fa fa-lock bigger-130"></i></a>';
+                       }
+                       if (this.status=="N") {
+                        table_data += '<a class="red" href="#" onclick="inativarLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="ReativarLote" class="ace-icon fa fa fa-lock bigger-130"></i></a>';
+                      }
                         table_data += '</div>';
                         table_data += '</td>';
                         table_data += '</tr>';
@@ -1264,9 +1288,7 @@ function FiltrarLote(val, status = 'A') {
 
                     $("#dynamic-tables_lotes").html(vaso);
                 }
-
-
-
+                
 
                 // Função para exibir os dados da página atual
                 function exibirPaginaAtual() {
@@ -1312,6 +1334,17 @@ function FiltrarLote(val, status = 'A') {
     });
 }
 
+function PrintLote(id){
+    
+    gerarExcel(id);
+}
+
+function PrintLotePDF(id){
+    alert('pdf');
+    gerarPDF(id);
+}
+
+
 function inativarLote(idLote, status) {
 
     if (status == 'A') {
@@ -1355,16 +1388,45 @@ function inativarLote(idLote, status) {
         }
     })
 }
-$(document).on("click", ".insert-insumos", function (e) {
-    e.preventDefault();
-    var idLote = $(this).data("id-lote");
-    var dtCriacao = $(this).data("dt-criacao");
-    $("#lote_id").html(idLote);
-    // Redirecione para a página de edição de lote com o ID do lote e a data de criação como parâmetros
-    window.location.href = "editar_lote.php?id=" + idLote + "&dtCriacao=" + dtCriacao;
-});
 
+function ReabrirLote(idLote, status) {
 
+  alert(status);
+    let dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+
+    let id_user_tec = dadosAPI.tecnico_id;
+
+    let dados = {
+        endpoint: 'ReabrirLoteAPI',
+        status: status,
+        lote_id: idLote,
+        empresa: dadosAPI.empresa_id,
+
+    }
+    $.ajax({
+
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret["result"];
+            console.log(resultado);
+            if(resultado == "-4") {
+                MensagemGenerica("Lote inserido em ordem de serviço. Operação não permitida","warning");
+            }else{
+                MensagemGenerica("Lote reaberto para edição","success");
+                FiltrarLote("",'T');
+            }
+        }
+    })
+}
 
 function CriarLote() {
 
@@ -1777,6 +1839,7 @@ function ListarServicos(equipamento_id) {
 
 
 $("#btn-gravar").click(function () {// grando insumo no lote
+    alert('insumo');
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
@@ -1911,6 +1974,106 @@ $("#btn-gravar-serv").click(function () {
 
 function ImprimirLote() {
     let filtrar_palavra = $("#buscaCliente").val();
-    url = "relatorio_lote.php?desc_filtro=" + encodeURIComponent(filtrar_palavra);
-    window.open(url, "_blank");
+    // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
+    RetornarEquipamentosLote(LoteID, function(resultado) {
+        let dados = JSON.stringify(resultado);
+        url = "gerar_excel.php.php?desc_filtro=" + encodeURIComponent(filtrar_palavra) + "&dados=" + encodeURIComponent(dados);
+        window.open(url, "_blank");
+    });
 }
+
+
+function gerarPDF(LoteID) {
+    alert('chegou no PDF');
+       let filtrar_palavra ="teste";
+    // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    var dados = {
+        LoteID: LoteID,
+        endpoint: 'RetornarEquipamentosLoteAPI',
+        empresa_id: dadosAPI.empresa_id
+    };
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret['result'];
+            console.log('result:'+resultado);
+            if (resultado) {
+                let dadosJSON = JSON.stringify(resultado);
+                var form = $('<form action="gerar_pdf.php" method="post" target="_blank">' +
+                    '<input type="hidden" name="desc_filtro" value="' + filtrar_palavra + '" />' +
+                    '<input type="hidden" name="dados" value=\'' + dadosJSON + '\' />' +
+                    '</form>');
+                $('body').append(form);
+                form.submit();
+                form.remove();
+            } else {
+                MensagemGenerica("Nenhum dado encontrado");
+                $("#dynamic-table").html('');
+            }
+        }
+    });
+}
+
+function gerarExcel(LoteID) {
+    let filtrar_palavra ="teste";
+ // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
+ var dadosAPI = GetTnkValue();
+ if (!dadosAPI.tecnico_id) {
+     Sair();
+ }
+ var dados = {
+     LoteID: LoteID,
+     endpoint: 'RetornarEquipamentosLoteAPI',
+     empresa_id: dadosAPI.empresa_id
+ };
+ $.ajax({
+     type: "POST",
+     url: BASE_URL_AJAX("tecnico_api"),
+     data: JSON.stringify(dados),
+     headers: {
+         'Authorization': 'Bearer ' + GetTnk(),
+         'Content-Type': 'application/json'
+     },
+     success: function (dados_ret) {
+         var resultado = dados_ret['result'];
+         if (resultado) {
+             let dadosJSON = JSON.stringify(resultado);
+             var form = $('<form action="gerar_excel.php" method="post" target="_blank">' +
+                 '<input type="hidden" name="desc_filtro" value="' + filtrar_palavra + '" />' +
+                 '<input type="hidden" name="dados" value=\'' + dadosJSON + '\' />' +
+                 '</form>');
+             $('body').append(form);
+             form.submit();
+             form.remove();
+         } else {
+             MensagemGenerica("Nenhum dado encontrado");
+             $("#dynamic-table").html('');
+         }
+     }
+ });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,12 +15,12 @@ if (isset($_GET['id'])) {
 
 	<style>
 		tr.campo-vazio {
-			background-color: #ffcccc;
+			background-color: red;
 			/* Cor de fundo vermelha */
 		}
 
 		.linha-incompleta {
-			background-color: #ffcccc;
+			background-color: #abd589db;
 			/* Cor de fundo vermelha */
 		}
 
@@ -67,10 +67,10 @@ if (isset($_GET['id'])) {
 					<ul class="breadcrumb">
 						<li>
 							<i class="ace-icon fa fa-home home-icon"></i>
-							<a href="#">Home</a>
+							<a href="index.php">Home</a>
 						</li>
 
-						<li class="active">Configurações</li>
+						<li class="active">Edição de equipamento</li>
 					</ul><!-- /.breadcrumb -->
 				</div>
 				<!-- conteudo da pagina -->
@@ -88,7 +88,7 @@ if (isset($_GET['id'])) {
 
 									<div class="widget-toolbar no-border invoice-info">
 										<span class="invoice-info-label">Lote:</span>
-										<input type="text" id="loteID">
+										<input type="hidden" id="loteID">
 										<span id="lote_id_label" class="red"><?= $loteID ?></span>
 
 										<br />
@@ -103,24 +103,7 @@ if (isset($_GET['id'])) {
 									</div>
 								</div>
 
-
-
-								<?php # Dados do equipamento 
-								?>
-
-
-								<div id="dynamic-tables_lotes">
-									<table id="dynamic-table-lote" class="table table-striped table-bordered table-hover">
-										<!-- Linhas da tabela -->
-									</table>
-
-									<!-- Detalhes do equipamento -->
-									<tr class="detail-row">
-										<td colspan="4">
-											<!-- Conteúdo dos detalhes -->
-										</td>
-									</tr>
-								</div>
+								<div id="dynamic-table-container"></div>
 
 								<?php
 								include_once 'modal/_lote.php';
@@ -128,18 +111,9 @@ if (isset($_GET['id'])) {
 								?>
 
 								<div class="col-sm-12" style="margin-top: 1px;">
-									
-								<ul class="pager">
-									<li id="previous-page" class="previous">
-										<a class="btn btn-info btn-sm" href="#">&larr; Anterior</a>
-									</li>
-									<li id="next-page" class="next">
-										<a class="btn btn-info btn-sm" href="#">Próxima &rarr;</a>
-									</li>
-								</ul>
-								<ul id="pagination-ul" class="pagination"></ul>
-									<span id="current-page">1</span> <!-- Elemento para exibir o número da página atual -->
-									<span id="entries-info"></span> <!-- Elemento para exibir a informação de exibição de entradas -->
+								
+								
+								
 								</div><!-- /.span -->
 								<div class="col-xs-12 col-sm-12">
 									<button class="btn btn-success btn-sm col-xs-12 col-sm-6" onclick="return EncerrarLote()"> Encerrar lote</button>
@@ -164,27 +138,24 @@ if (isset($_GET['id'])) {
 	</div><!-- /.final do conteudo Princial -->
 
 	<?php include_once PATH_URL . './Template/_includes/_scripts.php' ?>
+		<!-- page specific plugin scripts -->
+		<script src="assets/js/jquery.dataTables.min.js"></script>
+		<script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
+		<script src="assets/js/dataTables.buttons.min.js"></script>
+		<script src="assets/js/buttons.flash.min.js"></script>
+		<script src="assets/js/buttons.html5.min.js"></script>
+		<script src="assets/js/buttons.print.min.js"></script>
+		<script src="assets/js/buttons.colVis.min.js"></script>
+		<script src="assets/js/dataTables.select.min.js"></script>
+
 	<script src="../Resource/js/mensagem.js"></script>
 	<script src="../Resource/ajax/tecnico-ajx.js"></script>
 	<script>
 		Verify();
 		FiltrarEquipamentoLote();
+		
 	</script>
-	<!-- <script>
-		if ($("#verMais").is(":visible")) {
-			
-		} else {
-			ligarRedirecionamento();
-		}
-	</script> -->
-	<script>
-		const eventSource = new EventSource('/sse.php');
-		eventSource.addEventListener('horario', e => {
-			console.log(e);
-
-			document.getElementById('sse').innerHTML = e.data;
-		});
-	</script>
+	
 
 </body>
 

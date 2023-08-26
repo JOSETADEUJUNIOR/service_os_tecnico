@@ -149,9 +149,139 @@
 </div>
 
 <script>
-    /* $(window).on("load", function(){
-   // página totalmente carregada (DOM, imagens etc.)
-   $("#nome").focus();
-   $("#nome").reset();
-}); */
+$("#btn-gravar").click(function () {// grando insumo no lote
+    alert('insumo');
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    // if (NotificarCampos(id_form)) {
+    var id_emp_func = dadosAPI.empresa_id;
+
+    // Obter os valores selecionados dos checkboxes e as quantidades dos inputs
+    var Produtos = [];
+
+    var produtosSelecionados = $("input[name='produto_id[]']:checked").each(function () {
+        var row = $(this).closest("tr")[0];
+        var quantidade = $(row).find("input[name='quantidade[]']").val();
+        if (quantidade > 0) {
+
+            Produtos.push({
+                "produto_id": $(row).find("input[name='produto_id[]']").val(),
+                "valor": $(row).find("input[name='valor[]']").val(),
+                "qtd": quantidade,
+            });
+        } else {
+            MensagemGenerica("Inserir quantidade", 'warning');
+            return;
+        }
+    });
+
+    if (Produtos.length === 0) {
+        MensagemGenerica("Para gravar, adicione algum produto", 'warning');
+        return;
+    }
+
+    let dados = {
+        endpoint: 'GravarDadosLoteGeral',
+        lote_equip_id: $("#id_lote_equip_dados").val(),
+        Produtos: Produtos
+    }
+
+    // Montar os dados para enviar na requisição AJAX
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (response) {
+            if (response['result'] == -2) {
+                MensagemGenerica("Produto com saldo insulficiente", "warning");
+            } else {
+                MensagemGenerica("Produto Adicionado com sucesso", 'success');
+                ListarProdutos($("#id_equipamento").val());
+                CarregarProdutosOS($("#id_lote_equip_dados").val());
+                FiltrarEquipamentoLote();
+
+            }
+
+            // Processar a resposta da requisição
+        },
+        error: function (xhr, status, error) {
+            // Tratar erros na requisição
+            console.error(error);
+        }
+    });
+
+})
+
+$("#btn-gravar-serv").click(function () {
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    // if (NotificarCampos(id_form)) {
+    var id_emp_func = dadosAPI.empresa_id;
+
+    // Obter os valores selecionados dos checkboxes e as quantidades dos inputs
+    var Servicos = [];
+
+    var servicosSelecionados = $("input[name='servico_id[]']:checked").each(function () {
+        var row = $(this).closest("tr")[0];
+        //var quantidade = $(row).find("input[name='quantidade[]']").val();
+
+        Servicos.push({
+            "servico_id": $(row).find("input[name='servico_id[]']").val(),
+            "valor": $(row).find("input[name='valor[]']").val(),
+        });
+
+    });
+
+    if (Servicos.length === 0) {
+        MensagemGenerica("Para gravar, adicione algum serviço", 'warning');
+        return;
+    }
+
+    let dados = {
+        endpoint: 'GravarDadosServLoteGeral',
+        lote_equip_id: $("#id_lote_equip_dados").val(),
+        Servicos: Servicos
+    }
+
+    // Montar os dados para enviar na requisição AJAX
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (response) {
+            console.log(response);
+            if (response['result'] == -2) {
+                MensagemGenerica("Produto com saldo insulficiente", "warning");
+            } else {
+                MensagemGenerica("Serviço Adicionado com sucesso", 'success');
+                ListarServicos($("#id_equipamento").val());
+                CarregarServicosOS($("#id_lote_equip_dados").val());
+                FiltrarEquipamentoLote();
+
+
+            }
+
+            // Processar a resposta da requisição
+        },
+        error: function (xhr, status, error) {
+            // Tratar erros na requisição
+            console.error(error);
+        }
+    });
+
+})
+	
+
 </script>
