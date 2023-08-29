@@ -388,6 +388,7 @@ function FiltrarChamado(situacao = 4) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret['result'];
+
             var QuantidadeAberto = 0;
             if (this.data_atendimento == null) {
                 $(resultado).each(function () {
@@ -2065,6 +2066,49 @@ function gerarExcel(LoteID) {
 
 
 
+function ImportarEquipamento() {
+    let dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    alert('chegou');
+    let id_user_tec = dadosAPI.tecnico_id;
+    var excelFile = $("#excel-file")[0].files[0];
+
+    var formData = new FormData();
+    formData.append('endpoint', 'ImportarEquipamentoSQL');
+    formData.append('id', id_user_tec);
+    formData.append('equipamento_id', $("#equipamento").val());
+    formData.append('qtd_equip', $("#qtd_equip").val());
+    formData.append('numero_lote', $("#numero_lote").val());
+    formData.append('empresa_id', dadosAPI.empresa_id);
+    formData.append('data_lote', $('#data_lote').val());
+    formData.append('excel', excelFile);
+
+    console.log(formData.getAll('excel'));
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+        },
+        success: function (dados) {
+            let resultado = dados['result'];
+
+            if (resultado==1) {
+                MensagemSucesso();
+                FiltrarLote();
+                $("#lote").modal('hide');
+            } else {
+                MensagemErro();
+            }
+        }
+    });
+    return false;
+}
 
 
 

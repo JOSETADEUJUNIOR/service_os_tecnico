@@ -36,13 +36,14 @@
                             <input class="form-control obg" id="qtd_equip" name="qtd_equip" placeholder="Digite o aqui....">
                         </div>
                     </div>
-                   
+                    <input type="file" id="excel-file" accept=".xls, .xlsx" />
+<button onclick="ImportarEquipamento()" id="import-button">Importar</button>
                 </div>
 
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" id="btnCancelar" onclick="FechandoModal('form_equipamento')" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-                <button name="btnGravar" class="btn btn-success" onclick="return CriarLote()">Salvar</button>
+                <button name="btnGravar" class="btn btn-success" onclick="return ImportarEquipamento()">Salvar</button>
             </div>
         </div>
         <!-- /.modal-content -->

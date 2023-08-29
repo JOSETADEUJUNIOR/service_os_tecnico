@@ -48,6 +48,7 @@
 								<div class="col-xs-12">
 									<h4 class="pink">
 										<a href="#lote" role="button" class="btn btn-success" data-toggle="modal"><i class="ace-icon fa fa-plus white"></i>Novo</a>
+										
 									</h4>
 									<div class="table-header">
 										Lotes criados
@@ -120,6 +121,7 @@
     // Redirecione para a página de edição de lote com o ID do lote e a data de criação como parâmetros
     window.location.href = "editar_lote.php?id=" + idLote + "&dtCriacao=" + dtCriacao;
 });
+
 
 
 	</script>
