@@ -16,17 +16,17 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Data do lote</label>
-                            <input type="date" class="form-control obg" id="data_lote" value="<?= date("Y-m-d")?>" name="data_lote" placeholder="Digite o aqui....">
+                            <input type="date" class="form-control obg" id="data_lote" value="<?= date("Y-m-d") ?>" name="data_lote" placeholder="Digite o aqui....">
                         </div>
                     </div>
-                    
+
                     <div class="col-md-8">
                         <input type="hidden" name="idEquip" id="idEquip">
                         <div class="form-group">
                             <label>Selecione o equipamento</label>
                             <select class="form-control obg" id="equipamento" name="equipamento">
                                 <option value="">Selecione</option>
-                                
+
                             </select>
                         </div>
                     </div>
@@ -36,15 +36,25 @@
                             <input class="form-control obg" id="qtd_equip" name="qtd_equip" placeholder="Digite o aqui....">
                         </div>
                     </div>
-                    <input type="file" id="excel-file" accept=".xls, .xlsx" />
-<button onclick="ImportarEquipamento()" id="import-button">Importar</button>
-                </div>
 
+                    <div class="col-xs-12">
+                        <input type="file" class="btn btn-info btn-xs" id="excel-file" accept=".xls, .xlsx" />
+
+                    </div>
+
+                    <div center class="col-xs-12 col-sm-4" id="loading" style="display: none;">
+                        <img src="../../src/Template/assets/images/loading.avif" width="150px" height="150px" alt="Carregando...">
+                        <p>Gravando equipamentos, aguarde...</p>
+                    </div>
+                </div>
             </div>
+
             <div class="modal-footer justify-content-between">
+
                 <button type="button" id="btnCancelar" onclick="FechandoModal('form_equipamento')" class="btn btn-info" data-dismiss="modal">Cancelar</button>
                 <button name="btnGravar" class="btn btn-success" onclick="return ImportarEquipamento()">Salvar</button>
             </div>
+
         </div>
         <!-- /.modal-content -->
     </div>

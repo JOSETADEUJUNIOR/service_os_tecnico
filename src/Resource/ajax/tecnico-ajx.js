@@ -2071,7 +2071,7 @@ function ImportarEquipamento() {
     if (!dadosAPI.tecnico_id) {
         Sair();
     }
-    alert('chegou');
+    $("#loading").show();
     let id_user_tec = dadosAPI.tecnico_id;
     var excelFile = $("#excel-file")[0].files[0];
 
@@ -2096,14 +2096,22 @@ function ImportarEquipamento() {
             'Authorization': 'Bearer ' + GetTnk(),
         },
         success: function (dados) {
+            $("#loading").hide();
             let resultado = dados['result'];
-
-            if (resultado==1) {
+            console.log(resultado);
+            if (resultado === 1) {
                 MensagemSucesso();
                 FiltrarLote();
                 $("#lote").modal('hide');
-            } else {
-                MensagemErro();
+            } else if (resultado.status === -11) {
+                let rowCount = resultado.rowCount;
+                MensagemGenerica(`Quantidade informada diferente da planilha (${rowCount} equipamentos), favor ajustar`, "warning");
+            } else if (resultado.status === -12) {
+                let rowCount = resultado.rowCount;
+                MensagemGenerica("Formato de arquivo não suportado. Por favor, envie um arquivo Excel.", "warning");
+            } else if (resultado.status === 33) {
+                let rowCount = resultado.rowCount;
+                MensagemGenerica("Erro no upload do arquivo. Por favor, tente novamente.", "error");
             }
         }
     });
