@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="../Template/assets/css/ace-skins.min.css" />
   <link rel="stylesheet" href="../Template/assets/css/ace-rtl.min.css" />
   <link rel="stylesheet" href="../Template/assets/css/estilo.css">
+  <link rel="stylesheet" href="../Template/assets/css/jquery-ui.min.css" />
+		<link rel="stylesheet" href="../Template/assets/css/bootstrap-datepicker3.min.css" />
+		<link rel="stylesheet" href="../Template/assets/css/ui.jqgrid.min.css" />
 
 </head>
 <style>

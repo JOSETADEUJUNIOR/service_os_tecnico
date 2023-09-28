@@ -35,6 +35,10 @@
 <!-- ace scripts -->
 <script src="../Template/assets/js/ace-elements.min.js"></script>
 <script src="../Template/assets/js/ace.min.js"></script>
+<script src="../Template/assets/js/jquery.js" type="text/javascript"></script>
+<script src="../Template/assets/js/jquery-ui.js" type="text/javascript"></script>
+<script src="../Template/assets/js/grid.locale-en.js" type="text/javascript"></script>
+<script src="../Template/assets/js/jquery.jqGrid.min.js" type="text/javascript"></script>
 
 <script src="//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"></script>
 		<script src="../Template/assets/js/dataTables.select.min.js"></script>

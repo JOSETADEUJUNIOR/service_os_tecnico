@@ -1,5 +1,5 @@
 <div class="modal fade" id="itens_lote">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content bg-white">
             <div class="modal-header bg-primary">
                 <h4 class="modal-title">Inserir insumos e serviços</h4>

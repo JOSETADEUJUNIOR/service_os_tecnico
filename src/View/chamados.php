@@ -95,9 +95,11 @@
 						</div><!-- /.col -->
 					</div><!-- /.row -->
 				</div><!-- /.final do conteudo da pagina -->
-				<div id="divload">
-
-				</div>
+				<center>
+					<div id="loading-spinner" class="fullscreen-spinner">
+						<div class="spinner"></div>
+					</div>
+				</center>
 			</div>
 		</div><!-- /.main-content -->
 		<form id="form_chamado" action="chamados.php" method="post">
@@ -108,6 +110,19 @@
 	</div><!-- /.final do conteudo Princial -->
 
 	<?php include_once PATH_URL . './Template/_includes/_scripts.php' ?>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Mostra o spinner quando a página é carregada
+			load();
+
+			// Aqui, você pode adicionar qualquer código de inicialização da página, se necessário.
+
+			// Após a conclusão do carregamento inicial da página (por exemplo, quando todos os recursos são carregados), oculte o spinner.
+			window.addEventListener("load", function() {
+				RemoverLoad();
+			});
+		});
+	</script>
 	<script src="../Resource/js/mensagem.js"></script>
 	<script src="../Resource/ajax/tecnico-ajx.js"></script>
 	<script>

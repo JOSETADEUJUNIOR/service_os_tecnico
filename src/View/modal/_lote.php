@@ -42,17 +42,13 @@
 
                     </div>
 
-                    <div center class="col-xs-12 col-sm-4" id="loading" style="display: none;">
-                        <img src="../../src/Template/assets/images/loading.avif" width="150px" height="150px" alt="Carregando...">
-                        <p>Gravando equipamentos, aguarde...</p>
-                    </div>
                 </div>
             </div>
 
             <div class="modal-footer justify-content-between">
 
                 <button type="button" id="btnCancelar" onclick="FechandoModal('form_equipamento')" class="btn btn-info" data-dismiss="modal">Cancelar</button>
-                <button name="btnGravar" class="btn btn-success" onclick="return ImportarEquipamento()">Salvar</button>
+                <button name="btnGravar" class="btn btn-success" onclick="return ImportarEquipamento('form_import_equip')">Salvar</button>
             </div>
 
         </div>

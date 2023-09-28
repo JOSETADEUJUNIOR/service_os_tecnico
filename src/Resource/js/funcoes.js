@@ -2,10 +2,10 @@
 const URL_API = window.PATH_URL = document.location.origin + '/service_os/src/Resource/api/';
 
 function load() {
-    $("#divload").addClass("overlay").html('<i class="fas fa-2x fa-sync-alt fa-spin"> </i>');
+    $("#loading-spinner").show();
 }
 function RemoverLoad() {
-    $("#divload").removeClass("overlay").html('');
+$("#loading-spinner").hide();
 }
 
 function AlterarSetorModal(id, nome) {

@@ -9,7 +9,7 @@ use Dompdf\Options;
 
     // Resto do código do seu relatório aqui...
     $options = new Options();
-    $options->setChroot('../../Resource/dataview/arquivos');
+   
     
     $html = "";
     
@@ -19,8 +19,10 @@ use Dompdf\Options;
     if (isset($_POST['desc_filtro']) && isset($_POST['dados'])) {
         $desc_filtro = $_POST['desc_filtro'];
         $dados = json_decode($_POST['dados'], true);
-       
+
 ?>
+       
+
     <style>
         table {
             font-family: arial, sans-serif;
@@ -48,9 +50,8 @@ use Dompdf\Options;
 
         <table style="width:100%">
             <tr>
-                <th><?= $img ?>
-                </th>
-                <th colspan="6">
+               
+                <th colspan="7">
                     <p>Nome empresa:<span><?= $dados[0]['EmpNome']?></span></p>
                     <p>Empresa CNPJ:<span><?= $dados[0]['EmpCNPJ']?></span></p>
                     <p>Empresa Endereço:<span><?= $dados[0]['EmpEnd']?></span></p>

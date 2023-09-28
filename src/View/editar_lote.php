@@ -1,9 +1,17 @@
-<?php require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+<?php
+
+use Illuminate\Support\Facades\Redirect;
+
+ require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 if (isset($_GET['id'])) {
 	$loteID = $_GET['id'];
 	$dataCriacao = $_GET['dtCriacao'];
-} ?>
+}else{ ?>
+	<script>MensagemGenerica("teste", 'warning')</script>
+	
+<?php  header('location: listar_lote.php');
+        exit; } ?>
 
 <!DOCTYPE html>
 <html>
@@ -42,7 +50,29 @@ if (isset($_GET['id'])) {
 		body{
 			font-size: 12px;
 		}
-	</style>
+	
+    .scrollable-table th, .scrollable-table td {
+    width: 150px; /* Defina a largura desejada para as células */
+    white-space: nowrap; /* Impede que o conteúdo seja quebrado em várias linhas */
+    overflow: hidden; /* Esconde qualquer conteúdo que exceda a largura das células */
+    text-overflow: ellipsis; /* Adiciona "..." ao final do conteúdo que não couber na célula */
+}
+
+/* Estilo para a div que contém a tabela */
+.table-container {
+    width: 100%;
+    max-height: 500px; /* Defina a altura máxima desejada para ativar a barra de rolagem vertical */
+    overflow: auto; /* Ativa a barra de rolagem vertical quando necessário */
+}
+
+/* Estilo para a div que envolve a tabela */
+.table-wrapper {
+    max-width: 100%; /* Isso permite que a barra de rolagem horizontal apareça quando a tabela for mais larga */
+    overflow: auto; /* Ativa a barra de rolagem horizontal quando necessário */
+}
+
+
+</style>
 
 </head>
 
@@ -102,9 +132,10 @@ if (isset($_GET['id'])) {
 										</a>
 									</div>
 								</div>
-
-								<div id="dynamic-table-container"></div>
-
+								<div class="table-container">
+                                <div class="table-wrapper">
+								<div id="dynamic-table-container"></div></div>
+								</div>
 								<?php
 								include_once 'modal/_lote.php';
 								include_once 'modal/_dadosLote.php';

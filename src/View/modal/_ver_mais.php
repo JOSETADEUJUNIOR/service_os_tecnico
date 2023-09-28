@@ -1,3 +1,27 @@
+<style>
+    .scrollable-table th, .scrollable-table td {
+    width: 150px; /* Defina a largura desejada para as células */
+    white-space: nowrap; /* Impede que o conteúdo seja quebrado em várias linhas */
+    overflow: hidden; /* Esconde qualquer conteúdo que exceda a largura das células */
+    text-overflow: ellipsis; /* Adiciona "..." ao final do conteúdo que não couber na célula */
+}
+
+/* Estilo para a div que contém a tabela */
+.table-container {
+    width: 100%;
+    max-height: 400px; /* Defina a altura máxima desejada para ativar a barra de rolagem vertical */
+    overflow: auto; /* Ativa a barra de rolagem vertical quando necessário */
+}
+
+/* Estilo para a div que envolve a tabela */
+.table-wrapper {
+    max-width: 100%; /* Isso permite que a barra de rolagem horizontal apareça quando a tabela for mais larga */
+    overflow: auto; /* Ativa a barra de rolagem horizontal quando necessário */
+}
+
+
+</style>
+
 <div class="modal fade" id="verMais">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-white">
@@ -69,9 +93,12 @@
                                 Produtos e serviços adicionados na ordem de serviço
                             </h3>
 
-                            <div class="table-responsive modal-content">
+                            <div class="table-responsive">
                                 <div class="modal-body">
-                                    <table id="dynamic-table-equipamentos-lote" class="table table-hover custom-table-style" style="width: 100%;">
+                                <div class="table-container">
+                                <div class="table-wrapper">
+                                <table id="dynamic-table-equipamentos-lote" class="table table-hover table-condensed table-bordered table-striped scrollable-table">
+         
                                         <thead>
                                             <tr>
                                                 <th>Lote</th>
@@ -94,10 +121,12 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-                                    <div id="botoes-paginacao" style="text-align:center;">
+                                    </div>
+                                </div>
+                                  <!--   <div id="botoes-paginacao" style="text-align:center;">
                                         <button class="btn btn-info btn-sm" id="pagina-anterior">Anterior</button>
                                         <button class="btn btn-info btn-sm" id="proxima-pagina">Próxima</button>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                             </div>
