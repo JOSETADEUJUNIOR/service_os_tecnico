@@ -68,7 +68,6 @@ function ValidarAcesso(id_form) {
             email: $("#login").val(),
             senha: $("#senha").val(),
             endpoint: 'Autenticar'
-
         }
         $.ajax({
             type: "POST",
@@ -264,7 +263,7 @@ function proximaPagina() {
 
     // Limpar o rodapé com o total geral ou outros elementos relacionados
     $("#total_geral").html('');
-    
+
     // Remover eventuais classes ou estilos adicionados durante a interação com o modal
     // Por exemplo, se você adicionou classes de destaque, pode removê-las aqui
 
@@ -306,7 +305,6 @@ function RetornarEquipamentosLote(LoteID) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret['result'];
-            console.log("EquipLote:" + resultado);
 
             if (resultado) {
                 RemoverLoad();
@@ -334,10 +332,9 @@ function RetornarEquipamentosLote(LoteID) {
                         tabelaHTML += '<td>' + registro.servicos_nome + '</td>';
                         tabelaHTML += '<td>' + registro.total_geral + '</td>';
                         tabelaHTML += '</tr>';
-                        valorTotalGeral += parseFloat(registro.total_geral || 0); 
-                        if (valorTotalGeral==0?$("#total_geral").html(''):$("#total_geral").html("<strong>Total Geral:</strong> " + valorTotalGeral.toFixed(2))); 
+                        valorTotalGeral += parseFloat(registro.total_geral || 0);
+                        if (valorTotalGeral==0?$("#total_geral").html(''):$("#total_geral").html("<strong>Total Geral:</strong> " + valorTotalGeral.toFixed(2)));
                     }
-                    console.log("paginas:"+paginas);
                     $("#dynamic-table-equipamentos-lote tbody").html(tabelaHTML);
                 }
 
@@ -836,7 +833,6 @@ function EncerrarLote() {
             },
             success: function (dados_ret) {
                 var resultado = dados_ret["result"];
-                console.log(resultado);
                 if (resultado == '1') {
                     RemoverLoad();
                     MensagemSucesso();
@@ -879,7 +875,6 @@ function FiltrarEquipamentoLote() {
         },
         success: function (dados_ret) {
             var resultado = dados_ret['result'];
-            console.log("equipamento:", resultado);
             var QuantidadeAberto = 0;
             if (this.data_atendimento == null) {
                 $(resultado).each(function () {
@@ -924,7 +919,7 @@ function FiltrarEquipamentoLote() {
                 $("#dynamic-table-container").html(tableHTML);
 
                 // Inicializar o DataTable
-              
+
 
                // Evento de clique no link "Editar"
                     $(document).on("click", ".editar", function (e) {
@@ -932,10 +927,10 @@ function FiltrarEquipamentoLote() {
                         var tr = $(this).closest("tr");
                         var numeroSerieInput = tr.find(".numero-serie"); // Seleciona o campo de número de série
                         var versaoInput = tr.find(".versao"); // Seleciona o campo de versão
-                        
+
                         numeroSerieInput.removeAttr("readonly");
                         versaoInput.removeAttr("readonly");
-                        
+
                         $(this).hide();
                         tr.find(".gravar").show();
                     });
@@ -1100,7 +1095,6 @@ function CarregarClientes() {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            console.log("cliente:" + resultado);
             $('<option>').val("").text("Selecione").appendTo(combo_clientes);
 
             $(resultado).each(function () {
@@ -1136,7 +1130,6 @@ function CarregarLote() {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            console.log("lotes:" + resultado);
             $('<option>').val("").text("Selecione").appendTo(combo_lote);
 
             $(resultado).each(function () {
@@ -1149,17 +1142,14 @@ function CarregarLote() {
 }
 
 function AbrirChamado(id_form) {
-   
+
         var dadosAPI = GetTnkValue();
         if (!dadosAPI.tecnico_id) {
             Sair();
         }
 
-        console.log("LoteCarregado:" + $("#lote").val());
         var id_user_tec = dadosAPI.tecnico_id;
         var id_emp_tec = dadosAPI.empresa_id;
-        console.log(id_user_tec);
-        console.log(id_emp_tec);
         var dados = {
             endpoint: "AbrirChamado",
             id_user: id_user_tec,
@@ -1184,7 +1174,6 @@ function AbrirChamado(id_form) {
             },
             success: function (dados_ret) {
                 var resultado = dados_ret["result"];
-                console.log(resultado);
                 /* $("#novoChamado").modal("hide"); */
                 if (resultado == '1') {
                     MensagemSucesso();
@@ -1197,7 +1186,7 @@ function AbrirChamado(id_form) {
 
 
         })
-    
+
     return false;
 
 }
@@ -1225,7 +1214,6 @@ function FiltrarLote(val, status) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret['result'];
-            console.log("resultado:", resultado);
             var QuantidadeAberto = 0;
             if (this.data_atendimento == null) {
                 $(resultado).each(function () {
@@ -1291,7 +1279,7 @@ function FiltrarLote(val, status) {
 
                     $("#dynamic-tables_lotes").html(vaso);
                 }
-                
+
 
                 // Função para exibir os dados da página atual
                 function exibirPaginaAtual() {
@@ -1338,7 +1326,7 @@ function FiltrarLote(val, status) {
 }
 
 function PrintLote(id){
-    
+
     gerarExcel(id);
 }
 
@@ -1379,7 +1367,6 @@ function inativarLote(idLote, status) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            console.log(resultado);
             if (resultado == '1') {
                 MensagemSucesso();
                 FiltrarLote();
@@ -1418,7 +1405,6 @@ function ReabrirLote(idLote, status) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            console.log(resultado);
             if(resultado == "-4") {
                 MensagemGenerica("Lote inserido em ordem de serviço. Operação não permitida","warning");
             }else{
@@ -1457,7 +1443,6 @@ function CriarLote() {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            console.log(resultado);
             if (resultado == '1') {
                 RemoverLoad();
                 MensagemSucesso();
@@ -1603,7 +1588,6 @@ function preencherTabelaServicos(servicos) {
 
 function preencherTabelaItens(itens) {
 
-    console.log(itens);
     if (itens && itens.length > 0) {
 
         $("#div_listagem_itens_os").show();
@@ -1728,7 +1712,6 @@ function ListarProdutos(equipamento_id) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            console.log('prod:', resultado);
 
             var tabelaProdutos = $("#tabela-produtos tbody");
             tabelaProdutos.empty(); // Limpa as linhas anteriores da tabela
@@ -1803,7 +1786,6 @@ function ListarServicos(equipamento_id) {
         },
         success: function (dados_ret_serv) {
             var resultado_serv = dados_ret_serv["result"];
-            console.log('servic:', resultado_serv);
 
             var tabelaServicos = $("#tabela-servicos tbody");
             tabelaServicos.empty(); // Limpa as linhas anteriores da tabela
@@ -1952,7 +1934,6 @@ $("#btn-gravar-serv").click(function () {
             'Content-Type': 'application/json'
         },
         success: function (response) {
-            console.log(response);
             if (response['result'] == -2) {
                 MensagemGenerica("Produto com saldo insulficiente", "warning");
             } else {
@@ -1986,7 +1967,7 @@ function ImprimirLote() {
 
 
 function gerarPDF(LoteID) {
-    
+
        let filtrar_palavra ="teste";
     // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
     var dadosAPI = GetTnkValue();
@@ -2008,10 +1989,9 @@ function gerarPDF(LoteID) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret['result'];
-            console.log('result:'+resultado);
             if (resultado) {
                 let dadosJSON = JSON.stringify(resultado);
-                dadosJSON.logo_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."; 
+                dadosJSON.logo_base64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...";
                 var form = $('<form action="gerar_pdf.php" method="post" target="_blank">' +
                     '<input type="hidden" name="desc_filtro" value="' + filtrar_palavra + '" />' +
                     '<input type="hidden" name="dados" value=\'' + dadosJSON + '\' />' +
@@ -2087,8 +2067,6 @@ function ImportarEquipamento(id_form) {
     formData.append('empresa_id', dadosAPI.empresa_id);
     formData.append('data_lote', $('#data_lote').val());
     formData.append('excel', excelFile);
-
-    console.log(formData.getAll('excel'));
     $.ajax({
         type: "POST",
         url: BASE_URL_AJAX("tecnico_api"),
@@ -2101,7 +2079,6 @@ function ImportarEquipamento(id_form) {
         success: function (dados) {
             $("#loading").hide();
             let resultado = dados['result'];
-            console.log(resultado);
             if (resultado === 1) {
                 RemoverLoad();
                 MensagemSucesso();

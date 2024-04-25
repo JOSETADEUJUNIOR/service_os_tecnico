@@ -1,3 +1,7 @@
+<?php
+
+use Src\_public\Util;
+?>
 <div class="modal fade" id="novoChamado">
     <div class="modal-dialog modal-xs">
         <div class="modal-content bg-white">
@@ -16,7 +20,7 @@
                     <div class="col-md-6 col-xs-12">
                         <div class="form-group">
                             <label>Data abertura</label>
-                            <input class="form-control" type="date" id="data_abertura" name="data_abertura" value="<?= date('Y-m-d') ?>">
+                            <input class="form-control" type="date" id="data_abertura" name="data_abertura" value="<?= Util::DataAtualTecnico(); ?>">
                         </div>
                     </div>
                     <div class="col-md-12 col-xs-12">

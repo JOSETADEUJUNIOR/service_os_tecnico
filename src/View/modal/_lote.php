@@ -1,3 +1,7 @@
+<?php
+
+use Src\_public\Util;
+?>
 <div class="modal fade" id="lote">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-white">
@@ -16,7 +20,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Data do lote</label>
-                            <input type="date" class="form-control obg" id="data_lote" value="<?= date("Y-m-d") ?>" name="data_lote" placeholder="Digite o aqui....">
+                            <input type="date" class="form-control obg" id="data_lote" value="<?= Util::DataAtualTecnico(); ?>" name="data_lote" placeholder="Digite o aqui....">
                         </div>
                     </div>
 

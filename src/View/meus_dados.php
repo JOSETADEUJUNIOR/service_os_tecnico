@@ -63,13 +63,13 @@
 											<form action="meus_dados.php" id="form_meusdados" method="post">
 
 												<div class="row">
-													<div class="col-md-4">
+													<div class="col-md-12">
 														<div class="form-group">
 															<label>Nome</label>
 															<input class="form-control obg" id="nome" name="nome" placeholder="Digite o aqui....">
 														</div>
 													</div>
-													<div class="col-md-2">
+													<div class="col-md-6">
 														<div class="form-group">
 															<label>Empresa</label>
 															<input class="form-control obg" id="empresa" name="empresa" placeholder="Digite o aqui....">
@@ -93,19 +93,25 @@
 															<input class="form-control obg" id="cep" name="cep" onblur="BuscarCep()" placeholder="Digite o aqui....">
 														</div>
 													</div>
-													<div class="col-md-4">
+													<div class="col-md-10">
 														<div class="form-group">
 															<label>Rua</label>
 															<input class="form-control obg" id="rua" name="rua" placeholder="Digite o aqui....">
 														</div>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-5">
+														<div class="form-group">
+															<label>Bairro</label>
+															<input class="form-control obg" id="bairro" name="bairro" placeholder="Digite o aqui....">
+														</div>
+													</div>
+													<div class="col-md-5">
 														<div class="form-group">
 															<label>Cidade</label>
 															<input class="form-control obg" id="cidade" name="cidade" placeholder="Digite o aqui....">
 														</div>
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-2">
 														<div class="form-group">
 															<label>Estado</label>
 															<input class="form-control obg" id="estado" name="estado" placeholder="Digite o aqui....">

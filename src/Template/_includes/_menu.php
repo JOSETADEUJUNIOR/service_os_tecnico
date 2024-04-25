@@ -19,13 +19,12 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
                 <i class="ace-icon fa fa-home"></i>
             </a>
 
-            <a class="btn btn-info">
+            <a href="meus_dados.php" class="btn btn-info">
                 <i class="ace-icon fa fa-user"></i>
             </a>
 
             <a href="chamados.php" class="btn btn-warning">
                 <i class="ace-icon fa fa-envelope"></i>
-                
             </a>
 
             <a href="#" onclick="Sair()" class="btn btn-danger">
@@ -103,13 +102,10 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
             <b class="arrow"></b>
         </li>
-       
+
     </ul><!-- /.nav-list -->
 
     <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
         <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
     </div>
 </div>
-
-
-	

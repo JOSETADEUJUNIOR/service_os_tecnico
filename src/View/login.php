@@ -112,7 +112,7 @@
                              <h5 style="text-align: center;"><i class="ace-icon fa fa-lock"></i>&nbsp;&nbsp;Acesso para tecnico</h5>
                              <input type="email" class="obg" name="login" id="login" autocomplete="off" placeholder="Email">
 
-                             <input type="password" class="obg" name="senha" id="senha">
+                             <input type="password" class="obg" name="senha" id="senha" placeholder="Senha">
 
                              <button type="submit" name="btn_acessar" onclick="return ValidarAcesso('form_login_tec')"><i class="ace-icon fa fa-key"></i> Entrar</button>
                          </form>
@@ -136,7 +136,7 @@
      <!--[if IE]>
 <script src="assets/js/jquery-1.11.3.min.js"></script>
 <![endif]-->
-    
+
  </body>
 
  </html>
