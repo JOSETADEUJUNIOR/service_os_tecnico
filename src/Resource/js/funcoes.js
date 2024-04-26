@@ -43,7 +43,6 @@ function ModalMais(id, LoteID, data_abertura, numero_nf, data_atendimento, data_
     if (laudotec != null) {
         $("#laudo").val(laudotec);
     } else if (laudotec = null) {
-        console.log('não tem');
         $("#laudo").val("não há dados");
     }
     $("#nf").html("#" + numero_nf);
@@ -63,14 +62,14 @@ function ModalMais(id, LoteID, data_abertura, numero_nf, data_atendimento, data_
 } */
 
 function CarregarDadosLote(id_lote_equip, equipamento_id, descricao, numero_lote, lote_id) {
-    alert(lote_id);
+
     $("#id_lote_equip_dados").val(id_lote_equip);
     $("#id_equipamento").val(equipamento_id);
     $("#loteID").val(lote_id);
     $("#numero_lote_dados").html(numero_lote);
     $("#equipamento_dados").html(descricao);
-    ListarProdutos(equipamento_id);
-    ListarServicos(equipamento_id);
+    ListarProdutos(equipamento_id, id_lote_equip);
+    ListarServicos(equipamento_id, id_lote_equip);
     CarregarProdutosOS(id_lote_equip);
     CarregarServicosOS(id_lote_equip);
 }
@@ -244,7 +243,7 @@ function CarregarGrupoEqLote(identificacao, nomes_grupos, nomes_insumos, id_lote
     $("#modal_grupo_eq_lote").modal("show");
     $("#id_lote").val(id_lote);
     $("#ids_insumos").val(ids_insumos);
-    let html = "<span>"+nomes_grupos+"</span>";
+    let html = "<span>" + nomes_grupos + "</span>";
     // Separando os nomes dos grupos e insumos
     let gruposArray = nomes_grupos.split(",");
     let insumosArray = nomes_insumos.split(",");
@@ -274,4 +273,42 @@ function CarregarGrupoEqLote(identificacao, nomes_grupos, nomes_insumos, id_lote
     $('#spanNomeGrupos').html(html);
 }
 
+function CarregarGrupoEqLoteModal(identificacao, nomes_grupos, nomes_insumos, ids_insumos) {
 
+    $("#id_insumos_grupos_lote_equip_dados").val(ids_insumos);
+
+    // Separando os nomes dos grupos e insumos
+    let gruposArray = nomes_grupos.split(",");
+    let insumosArray = nomes_insumos.split(",");
+
+    let htmlCompleto = '<table class="table table-hover table-condensed table-bordered table-striped scrollable-table">';
+    htmlCompleto += '<thead><tr>';
+    htmlCompleto += '<th class="sorting_desc">Identificação Equipamento</th>';
+    htmlCompleto += '<th class="sorting_desc">Grupo(s) do Equipamento</th>';
+    htmlCompleto += '<th class="sorting_desc">Insumo(s) do(s) Grupo(s)</th>';
+    htmlCompleto += '</tr></thead><tbody>';
+    htmlCompleto += '<tr>';
+    htmlCompleto += '<td>' + identificacao + '</td>';
+    htmlCompleto += '<td>';
+    gruposArray.forEach(function (nomeGrupo) {
+        htmlCompleto += "<li>" + nomeGrupo.trim() + "</li>";
+    });
+    htmlCompleto += '</td>';
+    htmlCompleto += '<td>';
+    insumosArray.forEach(function (insumo) {
+        htmlCompleto += "<li>" + insumo.trim() + "</li>";
+    });
+    htmlCompleto += '</td>';
+    htmlCompleto += '</tr>';
+    htmlCompleto += '</tbody>';
+    htmlCompleto += `<tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <button onclick="return AdicionarInsumoUmLoteAjx()" class="btn btn-success col-xs-12 col-sm-12 btn-sm" type="button">Incluir insumos do grupo</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+    </table>`;
+
+    $('#divGrupoEqLoteModal').html(htmlCompleto);
+}

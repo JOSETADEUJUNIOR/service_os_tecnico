@@ -79,7 +79,6 @@ function ValidarAcesso(id_form) {
             },
             success: function (dados_ret) {
                 var ret = dados_ret['result'];
-                console.log(ret);
                 if (ret == -3) {
                     MensagemGenerica('Não autorizado', 'info');
                 } else if (ret == 0) {
@@ -868,9 +867,13 @@ function MostrarGrupoEquipamentoLoteAjx(id_lote) {
             if (resultado.IDs_grupo != null) {
                 // Adiciona uma div para conter o conteúdo acima da tabela
                 var tableHTML = '<div>Deseja adicionar os insumos do grupo (' + resultado.nome_grupo + ') em todos os equipamentos'; // Conteúdo desejado
-                tableHTML += ' <button class="btn btn-xs btn-success" onclick="CarregarGrupoEqLote(\'' + resultado.identificacao + '\', \'' + resultado.nome_grupo + '\', \'' + resultado.nomes_insumos + '\', \'' + resultado.idLo + '\', \'' + resultado.ids_insumo + '\')">Adicionar</button></div>'; // Botão desejado
+                tableHTML += ' <button class="btn btn-xs btn-success" onclick="CarregarGrupoEqLote(\'' + resultado.identificacao + '\', \'' + resultado.nome_grupo + '\', \'' + resultado.nomes_insumos + '\', \'' + resultado.idLo + '\', \'' + resultado.ids_insumo + '\')">Adicionar</button></div>';
+                CarregarGrupoEqLoteModal(resultado.identificacao, resultado.nome_grupo, resultado.nomes_insumos, resultado.ids_insumo);
+                $("#divGrupoEqLote").html(tableHTML);
+            } else {
+                $("#divGrupoEqLote").html('');
+                $("#divPaiGrupoEqLoteModal").html('');
             }
-            $("#divGrupoEqLote").html(tableHTML);
         }
     });
 }
@@ -1536,6 +1539,12 @@ function preencherTabelaProdutos(produtos) {
     for (var i = 0; i < produtos.length; i++) {
         var produto = produtos[i];
 
+        if (produto.ProdDescricao == null) {
+            $('#div_listagem_itens_os').hide();
+        } else {
+            $('#div_listagem_itens_os').show();
+        }
+
         // Crie as colunas da tabela para exibir os dados do produto
         var colunaDescricao = $("<td></td>").text(produto.ProdDescricao);
         var colunaValor = $("<td></td>").text(produto.insumo_valor);
@@ -1573,10 +1582,7 @@ function CarregarServicosOS(id_equipamento) {
         },
         success: function (dados_ret) {
             var itens = dados_ret['result'];
-
             preencherTabelaServicos(itens);
-
-
         }
     })
     return false;
@@ -1589,6 +1595,11 @@ function preencherTabelaServicos(servicos) {
 
     for (var i = 0; i < servicos.length; i++) {
         var servico = servicos[i];
+        if (servico.ServNome == null) {
+            $('#div_listagem_servicos_os').hide();
+        } else {
+            $('#div_listagem_servicos_os').show();
+        }
 
         // Crie as colunas da tabela para exibir os dados do serviço
         var colunaNome = $("<td></td>").text(servico.ServNome);
@@ -1713,7 +1724,7 @@ function formatarValorEmReais(valor) {
 }
 
 
-function ListarProdutos(equipamento_id) {
+function ListarProdutos(equipamento_id, lote_equip_id) {
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
@@ -1726,7 +1737,8 @@ function ListarProdutos(equipamento_id) {
         endpoint: endpoint_produtos,
         id_emp_func: id_empresa,
         equipamento_id: equipamento_id,
-    }
+        lote_equip_id: lote_equip_id
+    };
     $.ajax({
         type: "POST",
         url: BASE_URL_AJAX("tecnico_api"),
@@ -1740,6 +1752,12 @@ function ListarProdutos(equipamento_id) {
 
             var tabelaProdutos = $("#tabela-produtos tbody");
             tabelaProdutos.empty(); // Limpa as linhas anteriores da tabela
+
+            if (resultado.length > 0) {
+                $("#listaInsumos").show();
+            } else {
+                $("#listaInsumos").hide();
+            }
 
             for (var i = 0; i < resultado.length; i++) {
                 var produto = resultado[i];
@@ -1786,7 +1804,7 @@ function ListarProdutos(equipamento_id) {
 }
 
 
-function ListarServicos(equipamento_id) {
+function ListarServicos(equipamento_id, lote_equip_id) {
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
         Sair();
@@ -1799,7 +1817,8 @@ function ListarServicos(equipamento_id) {
     var dados = {
         endpoint: endpoint_servicos,
         id_emp_func: id_empresa,
-        equipamento_id: equipamento_id
+        equipamento_id: equipamento_id,
+        lote_equip_id: lote_equip_id
     }
     $.ajax({
         type: "POST",
@@ -1811,18 +1830,22 @@ function ListarServicos(equipamento_id) {
         },
         success: function (dados_ret_serv) {
             var resultado_serv = dados_ret_serv["result"];
-
             var tabelaServicos = $("#tabela-servicos tbody");
             tabelaServicos.empty(); // Limpa as linhas anteriores da tabela
 
+            if (resultado_serv.length > 0) {
+                $('#div-servicos').show();
+            } else {
+                $('#div-servicos').hide();
+            }
             for (var i = 0; i < resultado_serv.length; i++) {
+
                 var servico = resultado_serv[i];
                 var linha = $("<tr></tr>");
 
                 // Coluna do nome do servico
                 var colunaNome = $("<td></td>").text(servico.ServNome);
                 linha.append(colunaNome);
-
 
                 // Coluna do valor do produto
                 var colunaValor = $("<td id=\"valor\"></td>");
@@ -1831,13 +1854,10 @@ function ListarServicos(equipamento_id) {
                 linha.append(colunaValor);
 
                 // Coluna do checkbox
-
                 var colunaCheckbox = $("<td></td>");
                 var checkbox = $("<input type='checkbox'>").attr("name", "servico_id[]").val(servico.ServID);
                 colunaCheckbox.append(checkbox);
                 linha.append(colunaCheckbox);
-
-
 
                 tabelaServicos.append(linha);
             }
@@ -1900,7 +1920,7 @@ $("#btn-gravar").click(function () {// grando insumo no lote
                 MensagemGenerica("Produto com saldo insulficiente", "warning");
             } else {
                 MensagemGenerica("Produto Adicionado com sucesso", 'success');
-                ListarProdutos($("#id_equipamento").val());
+                ListarProdutos($("#id_equipamento").val(), $("#id_lote_equip_dados").val());
                 CarregarProdutosOS($("#id_lote_equip_dados").val());
                 FiltrarEquipamentoLote();
 
@@ -1963,7 +1983,7 @@ $("#btn-gravar-serv").click(function () {
                 MensagemGenerica("Produto com saldo insulficiente", "warning");
             } else {
                 MensagemGenerica("Serviço Adicionado com sucesso", 'success');
-                ListarServicos($("#id_equipamento").val());
+                ListarServicos($("#id_equipamento").val(), $("#id_lote_equip_dados").val());
                 CarregarServicosOS($("#id_lote_equip_dados").val());
                 FiltrarEquipamentoLote();
 
@@ -2155,6 +2175,41 @@ function AdicionarInsumoTodoLoteAjx() {
                 MensagemSucesso();
                 FiltrarEquipamentoLote();
                 $("#modal_grupo_eq_lote").modal("hide");
+            } else {
+                MensagemErro();
+            }
+            RemoverLoad();
+        }
+    });
+
+    return false;
+}
+
+function AdicionarInsumoUmLoteAjx() {
+    load();
+    let dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    let dados = {
+        endpoint: 'AdicionarInsumoUmLoteAPI',
+        id_lote_equip: $("#id_lote_equip_dados").val(),
+        ids_insumo: $("#id_insumos_grupos_lote_equip_dados").val()
+    };
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret["result"];
+            if (resultado == '1') {
+                MensagemSucesso();
+                FiltrarEquipamentoLote();
+                CarregarProdutosOS($("#id_lote_equip_dados").val());
             } else {
                 MensagemErro();
             }
