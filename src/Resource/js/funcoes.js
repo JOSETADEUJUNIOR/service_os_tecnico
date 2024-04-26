@@ -5,7 +5,7 @@ function load() {
     $("#loading-spinner").show();
 }
 function RemoverLoad() {
-$("#loading-spinner").hide();
+    $("#loading-spinner").hide();
 }
 
 function AlterarSetorModal(id, nome) {
@@ -17,8 +17,8 @@ function AlterarModeloModal(id, nome) {
     $("#nome").val(nome);
 }
 
-function CarregarInsumosServLote(){
-    
+function CarregarInsumosServLote() {
+
 }
 
 function AlterarEquipamentoModal(id, nomeTipo, nomeModelo, identificacao, descricao) {
@@ -46,36 +46,33 @@ function ModalMais(id, LoteID, data_abertura, numero_nf, data_atendimento, data_
         console.log('não tem');
         $("#laudo").val("não há dados");
     }
-    $("#nf").html("#"+ numero_nf);
-    $("#OsID").val(id); 
-    $("#data_abertura").html(data_abertura); 
+    $("#nf").html("#" + numero_nf);
+    $("#OsID").val(id);
+    $("#data_abertura").html(data_abertura);
     CarregarProdutosOS(id);
     RetornarEquipamentosLote(LoteID);
-    
+
 }
 
 /* function CarregarDadosOS(id, data_abertura, numero_nf)
 {   $("#nf").html("#"+ numero_nf);
-    $("#OsID").val(id); 
-    $("#data_abertura").html(data_abertura); 
+    $("#OsID").val(id);
+    $("#data_abertura").html(data_abertura);
     CarregarProdutosOS(id);
    ;
 } */
 
-function CarregarDadosLote(id_lote_equip, equipamento_id, descricao, numero_lote, lote_id)
-{  
-    alert(lote_id); 
+function CarregarDadosLote(id_lote_equip, equipamento_id, descricao, numero_lote, lote_id) {
+    alert(lote_id);
     $("#id_lote_equip_dados").val(id_lote_equip);
-    $("#id_equipamento").val(equipamento_id); 
-    $("#loteID").val(lote_id); 
-    $("#numero_lote_dados").html(numero_lote); 
-    $("#equipamento_dados").html(descricao); 
+    $("#id_equipamento").val(equipamento_id);
+    $("#loteID").val(lote_id);
+    $("#numero_lote_dados").html(numero_lote);
+    $("#equipamento_dados").html(descricao);
     ListarProdutos(equipamento_id);
     ListarServicos(equipamento_id);
     CarregarProdutosOS(id_lote_equip);
     CarregarServicosOS(id_lote_equip);
-   
-   ;
 }
 function ModalFinalizaChamado(id, idAlocado, data_atendimento, tec_atendimento, laudo = "") {
     $("#id_chamado_finalizado").val(id);
@@ -85,7 +82,7 @@ function ModalFinalizaChamado(id, idAlocado, data_atendimento, tec_atendimento, 
     $("#laudofinal").val(laudo);
 }
 function AlterarUsuarioModal(id, tipo, nome, email, telefone, cep, rua, bairro, cidade, sigla_estado, empresa_tecnico, setor_id, id_end) {
-    
+
     EscolherUsuario(tipo);
     $("#id_user").val(id);
     $("#tipo").val(tipo);
@@ -157,7 +154,7 @@ function BASE_URL_AJAX($file_ajax) {
     return URL_API + $file_ajax + ".php";
 }
 function EscolherUsuario(tipo) {
-   
+
     switch (tipo) {
         case '2':
             $("#divFunc").show();
@@ -241,6 +238,40 @@ function exibirDataBr(data) {
         var dataBr = dataArray[2] + '/' + dataArray[1] + '/' + dataArray[0];
         return dataBr;
     }
+}
+
+function CarregarGrupoEqLote(identificacao, nomes_grupos, nomes_insumos, id_lote, ids_insumos) {
+    $("#modal_grupo_eq_lote").modal("show");
+    $("#id_lote").val(id_lote);
+    $("#ids_insumos").val(ids_insumos);
+    let html = "<span>"+nomes_grupos+"</span>";
+    // Separando os nomes dos grupos e insumos
+    let gruposArray = nomes_grupos.split(",");
+    let insumosArray = nomes_insumos.split(",");
+
+    let htmlCompleto = '<table class="table table-hover table-condensed table-bordered table-striped scrollable-table">';
+    htmlCompleto += '<thead><tr>';
+    htmlCompleto += '<th class="sorting_desc">Identificação Equipamento</th>';
+    htmlCompleto += '<th class="sorting_desc">Grupo(s) do Equipamento</th>';
+    htmlCompleto += '<th class="sorting_desc">Insumo(s) do(s) Grupo(s)</th>';
+    htmlCompleto += '</tr></thead><tbody>';
+    htmlCompleto += '<tr>';
+    htmlCompleto += '<td>' + identificacao + '</td>';
+    htmlCompleto += '<td>';
+    gruposArray.forEach(function (nomeGrupo) {
+        htmlCompleto += "<li>" + nomeGrupo.trim() + "</li>";
+    });
+    htmlCompleto += '</td>';
+    htmlCompleto += '<td>';
+    insumosArray.forEach(function (insumo) {
+        htmlCompleto += "<li>" + insumo.trim() + "</li>";
+    });
+    htmlCompleto += '</td>';
+    htmlCompleto += '</tr>';
+    htmlCompleto += '</tbody></table>';
+
+    $('#spanGrupoEqLote').html(htmlCompleto);
+    $('#spanNomeGrupos').html(html);
 }
 
 

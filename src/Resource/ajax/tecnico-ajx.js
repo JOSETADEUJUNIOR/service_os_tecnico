@@ -247,7 +247,7 @@ function proximaPagina() {
     }
 }
 
- $('#verMais').on('hidden.bs.modal', function (e) {
+$('#verMais').on('hidden.bs.modal', function (e) {
     // Limpar os campos do modal e redefinir qualquer estado que precisa ser resetado
     $("#dt_atendimento").val('');
     $("#dt_encerramento").val('');
@@ -322,8 +322,8 @@ function RetornarEquipamentosLote(LoteID) {
                         let registro = pagina[i];
                         valor_total += registro.total_geral;
                         valor_total_insumos +=
-                        valor_total_servicos +=
-                        tabelaHTML += '<tr>';
+                            valor_total_servicos +=
+                            tabelaHTML += '<tr>';
                         tabelaHTML += '<td>' + registro.lote_id + '</td>';
                         tabelaHTML += '<td>' + registro.descricao + '</td>';
                         tabelaHTML += '<td>' + registro.numero_serie_equipamento + '</td>';
@@ -333,7 +333,7 @@ function RetornarEquipamentosLote(LoteID) {
                         tabelaHTML += '<td>' + registro.total_geral + '</td>';
                         tabelaHTML += '</tr>';
                         valorTotalGeral += parseFloat(registro.total_geral || 0);
-                        if (valorTotalGeral==0?$("#total_geral").html(''):$("#total_geral").html("<strong>Total Geral:</strong> " + valorTotalGeral.toFixed(2)));
+                        if (valorTotalGeral == 0 ? $("#total_geral").html('') : $("#total_geral").html("<strong>Total Geral:</strong> " + valorTotalGeral.toFixed(2)));
                     }
                     $("#dynamic-table-equipamentos-lote tbody").html(tabelaHTML);
                 }
@@ -850,7 +850,30 @@ function EncerrarLote() {
     }
 }
 
-
+function MostrarGrupoEquipamentoLoteAjx(id_lote) {
+    var dados = {
+        endpoint: 'ConsultarGrupoEquipamentoLoteAPI',
+        lote_id: parseInt(id_lote)
+    };
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret['result'];
+            if (resultado.IDs_grupo != null) {
+                // Adiciona uma div para conter o conteúdo acima da tabela
+                var tableHTML = '<div>Deseja adicionar os insumos do grupo (' + resultado.nome_grupo + ') em todos os equipamentos'; // Conteúdo desejado
+                tableHTML += ' <button class="btn btn-xs btn-success" onclick="CarregarGrupoEqLote(\'' + resultado.identificacao + '\', \'' + resultado.nome_grupo + '\', \'' + resultado.nomes_insumos + '\', \'' + resultado.idLo + '\', \'' + resultado.ids_insumo + '\')">Adicionar</button></div>'; // Botão desejado
+            }
+            $("#divGrupoEqLote").html(tableHTML);
+        }
+    });
+}
 
 function FiltrarEquipamentoLote() {
     load();
@@ -884,8 +907,10 @@ function FiltrarEquipamentoLote() {
 
             if (resultado.length > 0) {
                 RemoverLoad();
+                MostrarGrupoEquipamentoLoteAjx(id_lote);
                 // Criar a estrutura da tabela
-                var tableHTML = '<table class="table table-hover table-condensed table-bordered table-striped scrollable-table" id="dynamic-table">';
+                var tableHTML = '<div class="table-header" id="divGrupoEqLote"></div>';
+                tableHTML += '<table class="table table-hover table-condensed table-bordered table-striped scrollable-table" id="dynamic-table">';
                 tableHTML += '<thead>';
                 tableHTML += '<tr>';
                 tableHTML += '<th>Equipamento</th>';
@@ -903,9 +928,9 @@ function FiltrarEquipamentoLote() {
                     tableHTML += '<tr>';
                     tableHTML += '<td>' + this.identificacao + '</td>';
                     tableHTML += '<td><input type="hidden" id="id_lote_equip" class="id_lote_equip" value="' + (this.id_lote_equip) + '"><input type="text" id="numero-serie" class="numero-serie" value="' + (this.numero_serie || '') + '" readonly></td>';
-                        tableHTML += '<td><input type="text" id="versao" class="versao" value="' + (this.numero_versao || '') + '" readonly></td>';
-                    tableHTML += '<td>' + this.num_insumos + '</td>';
-                    tableHTML += '<td>' + this.num_servicos + '</td>';
+                    tableHTML += '<td><input type="text" id="versao" class="versao" value="' + (this.numero_versao || '') + '" readonly></td>';
+                    tableHTML += '<td>' + this.qtd_insumo + '</td>';
+                    tableHTML += '<td>' + this.qtd_servico + '</td>';
                     tableHTML += '<td><a href="#" class="green editar" title="inserir ñ serie e versão" data-equipamento-id="' + this.id_lote_equip + '"><i class="ace-icon fa fa-pencil bigger-130"></i></a> ';
                     tableHTML += '<a href="#" class="blue gravar" style="display: none;"><i class="ace-icon fa fa-save bigger-130"></i></a> ';
                     tableHTML += '<a href="#dadosLote" role="button" data-toggle="modal" onclick="CarregarDadosLote(\'' + this.id_lote_equip + '\', \'' + this.equipamento_id + '\', \'' + this.identificacao + '\', \'' + this.numero_lote + '\', \'' + this.lote_id + '\')" class="blue abrir-modal" data-equipamento-id="' + this.id_lote_equip + '"><i class="ace-icon fa fa-search-plus bigger-130"></i></a></td>';
@@ -921,27 +946,27 @@ function FiltrarEquipamentoLote() {
                 // Inicializar o DataTable
 
 
-               // Evento de clique no link "Editar"
-                    $(document).on("click", ".editar", function (e) {
-                        e.preventDefault();
-                        var tr = $(this).closest("tr");
-                        var numeroSerieInput = tr.find(".numero-serie"); // Seleciona o campo de número de série
-                        var versaoInput = tr.find(".versao"); // Seleciona o campo de versão
+                // Evento de clique no link "Editar"
+                $(document).on("click", ".editar", function (e) {
+                    e.preventDefault();
+                    var tr = $(this).closest("tr");
+                    var numeroSerieInput = tr.find(".numero-serie"); // Seleciona o campo de número de série
+                    var versaoInput = tr.find(".versao"); // Seleciona o campo de versão
 
-                        numeroSerieInput.removeAttr("readonly");
-                        versaoInput.removeAttr("readonly");
+                    numeroSerieInput.removeAttr("readonly");
+                    versaoInput.removeAttr("readonly");
 
-                        $(this).hide();
-                        tr.find(".gravar").show();
-                    });
+                    $(this).hide();
+                    tr.find(".gravar").show();
+                });
 
-                    $(document).on("click", ".gravar", function (e) {
-                        e.preventDefault(); // Impede que a página seja recarregada
-                        var tr = $(this).closest("tr");
-                        var equipamentoId = $(this).data("equipamento-id");
-                        var id_lote_equip = tr.find("#id_lote_equip").val();
-                        var numeroSerie = tr.find(".numero-serie").val();
-                        var versao = tr.find(".versao").val();
+                $(document).on("click", ".gravar", function (e) {
+                    e.preventDefault(); // Impede que a página seja recarregada
+                    var tr = $(this).closest("tr");
+                    var equipamentoId = $(this).data("equipamento-id");
+                    var id_lote_equip = tr.find("#id_lote_equip").val();
+                    var numeroSerie = tr.find(".numero-serie").val();
+                    var versao = tr.find(".versao").val();
 
                     if (!numeroSerie) {
                         MensagemGenerica("Campo numero de série é obrigatório", "warning");
@@ -1143,49 +1168,49 @@ function CarregarLote() {
 
 function AbrirChamado(id_form) {
 
-        var dadosAPI = GetTnkValue();
-        if (!dadosAPI.tecnico_id) {
-            Sair();
-        }
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
 
-        var id_user_tec = dadosAPI.tecnico_id;
-        var id_emp_tec = dadosAPI.empresa_id;
-        var dados = {
-            endpoint: "AbrirChamado",
-            id_user: id_user_tec,
-            empresa_id: id_emp_tec,
-            numero_nf: $("#numero_nf").val(),
-            cliente_id: $("#cliente").val(),
-            problema: $("#descricao_problema").val().trim(),
-            defeito: $("#defeito").val().trim(),
-            observacao: $("#observacao").val().trim(),
-            lote: $("#lote").val()
+    var id_user_tec = dadosAPI.tecnico_id;
+    var id_emp_tec = dadosAPI.empresa_id;
+    var dados = {
+        endpoint: "AbrirChamado",
+        id_user: id_user_tec,
+        empresa_id: id_emp_tec,
+        numero_nf: $("#numero_nf").val(),
+        cliente_id: $("#cliente").val(),
+        problema: $("#descricao_problema").val().trim(),
+        defeito: $("#defeito").val().trim(),
+        observacao: $("#observacao").val().trim(),
+        lote: $("#lote").val()
 
-        }
+    }
 
-        $.ajax({
-            type: "POST",
-            // url: BASE_URL_AJAX("funcionario_api"),
-            url: BASE_URL_AJAX("tecnico_api"),
-            data: JSON.stringify(dados),
-            headers: {
-                'Authorization': 'Bearer ' + GetTnk(),
-                'Content-Type': 'application/json'
-            },
-            success: function (dados_ret) {
-                var resultado = dados_ret["result"];
-                /* $("#novoChamado").modal("hide"); */
-                if (resultado == '1') {
-                    MensagemSucesso();
-                    FiltrarChamado();
-                    $("#novoChamado").modal('hide');
-                } else {
-                    MensagemErro();
-                }
+    $.ajax({
+        type: "POST",
+        // url: BASE_URL_AJAX("funcionario_api"),
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret["result"];
+            /* $("#novoChamado").modal("hide"); */
+            if (resultado == '1') {
+                MensagemSucesso();
+                FiltrarChamado();
+                $("#novoChamado").modal('hide');
+            } else {
+                MensagemErro();
             }
+        }
 
 
-        })
+    })
 
     return false;
 
@@ -1257,18 +1282,18 @@ function FiltrarLote(val, status) {
                         table_data += '</td>';
                         table_data += '<td>';
                         table_data += '<div class="hidden-sm hidden-xs action-buttons">';
-                        table_data += '<a id="print-button" href="#" onclick="PrintLote(\'' + this.id+ '\')" class="green"><i title="Imprir os dados do lote" class="ace-icon fa fa-file-excel-o bigger-130"></i></a>';
-                        table_data += '<a id="print-button-pdf" href="#" onclick="PrintLotePDF(\'' + this.id+ '\')" class="red"><i title="Imprir os dados do lote" class="ace-icon fa fa-file-pdf-o bigger-130"></i></a>';
-                       if (this.status=="A") {
-                           table_data += '<a class="blue insert-insumos" href="#" data-dt-criacao="' + dataCriacao + '" data-id-lote="' + this.id + '"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>';
-                           table_data += '<a class="red" href="#" onclick="inativarLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="Inativar o Lote" class="ace-icon fa fa-unlock bigger-130"></i></a>';
-                       }
-                       if (this.status=="E") {
-                          table_data += '<a class="red" href="#" onclick="ReabrirLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="Reabrir Lote" class="ace-icon fa fa-lock bigger-130"></i></a>';
-                       }
-                       if (this.status=="N") {
-                        table_data += '<a class="red" href="#" onclick="inativarLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="ReativarLote" class="ace-icon fa fa fa-lock bigger-130"></i></a>';
-                      }
+                        table_data += '<a id="print-button" href="#" onclick="PrintLote(\'' + this.id + '\')" class="green"><i title="Imprir os dados do lote" class="ace-icon fa fa-file-excel-o bigger-130"></i></a>';
+                        table_data += '<a id="print-button-pdf" href="#" onclick="PrintLotePDF(\'' + this.id + '\')" class="red"><i title="Imprir os dados do lote" class="ace-icon fa fa-file-pdf-o bigger-130"></i></a>';
+                        if (this.status == "A") {
+                            table_data += '<a class="blue insert-insumos" href="#" data-dt-criacao="' + dataCriacao + '" data-id-lote="' + this.id + '"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>';
+                            table_data += '<a class="red" href="#" onclick="inativarLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="Inativar o Lote" class="ace-icon fa fa-unlock bigger-130"></i></a>';
+                        }
+                        if (this.status == "E") {
+                            table_data += '<a class="red" href="#" onclick="ReabrirLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="Reabrir Lote" class="ace-icon fa fa-lock bigger-130"></i></a>';
+                        }
+                        if (this.status == "N") {
+                            table_data += '<a class="red" href="#" onclick="inativarLote(\'' + this.id + '\', \'' + this.status + '\')"><i title="ReativarLote" class="ace-icon fa fa fa-lock bigger-130"></i></a>';
+                        }
                         table_data += '</div>';
                         table_data += '</td>';
                         table_data += '</tr>';
@@ -1325,12 +1350,12 @@ function FiltrarLote(val, status) {
     });
 }
 
-function PrintLote(id){
+function PrintLote(id) {
 
     gerarExcel(id);
 }
 
-function PrintLotePDF(id){
+function PrintLotePDF(id) {
     gerarPDF(id);
 }
 
@@ -1405,11 +1430,11 @@ function ReabrirLote(idLote, status) {
         },
         success: function (dados_ret) {
             var resultado = dados_ret["result"];
-            if(resultado == "-4") {
-                MensagemGenerica("Lote inserido em ordem de serviço. Operação não permitida","warning");
-            }else{
-                MensagemGenerica("Lote reaberto para edição","success");
-                FiltrarLote("",'T');
+            if (resultado == "-4") {
+                MensagemGenerica("Lote inserido em ordem de serviço. Operação não permitida", "warning");
+            } else {
+                MensagemGenerica("Lote reaberto para edição", "success");
+                FiltrarLote("", 'T');
             }
         }
     })
@@ -1958,7 +1983,7 @@ $("#btn-gravar-serv").click(function () {
 function ImprimirLote() {
     let filtrar_palavra = $("#buscaCliente").val();
     // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
-    RetornarEquipamentosLote(LoteID, function(resultado) {
+    RetornarEquipamentosLote(LoteID, function (resultado) {
         let dados = JSON.stringify(resultado);
         url = "gerar_excel.php.php?desc_filtro=" + encodeURIComponent(filtrar_palavra) + "&dados=" + encodeURIComponent(dados);
         window.open(url, "_blank");
@@ -1968,7 +1993,7 @@ function ImprimirLote() {
 
 function gerarPDF(LoteID) {
 
-       let filtrar_palavra ="teste";
+    let filtrar_palavra = "teste";
     // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
     var dadosAPI = GetTnkValue();
     if (!dadosAPI.tecnico_id) {
@@ -2008,42 +2033,42 @@ function gerarPDF(LoteID) {
 }
 
 function gerarExcel(LoteID) {
-    let filtrar_palavra ="teste";
- // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
- var dadosAPI = GetTnkValue();
- if (!dadosAPI.tecnico_id) {
-     Sair();
- }
- var dados = {
-     LoteID: LoteID,
-     endpoint: 'RetornarEquipamentosLoteAPI',
-     empresa_id: dadosAPI.empresa_id
- };
- $.ajax({
-     type: "POST",
-     url: BASE_URL_AJAX("tecnico_api"),
-     data: JSON.stringify(dados),
-     headers: {
-         'Authorization': 'Bearer ' + GetTnk(),
-         'Content-Type': 'application/json'
-     },
-     success: function (dados_ret) {
-         var resultado = dados_ret['result'];
-         if (resultado) {
-             let dadosJSON = JSON.stringify(resultado);
-             var form = $('<form action="gerar_excel.php" method="post" target="_blank">' +
-                 '<input type="hidden" name="desc_filtro" value="' + filtrar_palavra + '" />' +
-                 '<input type="hidden" name="dados" value=\'' + dadosJSON + '\' />' +
-                 '</form>');
-             $('body').append(form);
-             form.submit();
-             form.remove();
-         } else {
-             MensagemGenerica("Nenhum dado encontrado");
-             $("#dynamic-table").html('');
-         }
-     }
- });
+    let filtrar_palavra = "teste";
+    // Chamar a função RetornarEquipamentosLote com o LoteID apropriado
+    var dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    var dados = {
+        LoteID: LoteID,
+        endpoint: 'RetornarEquipamentosLoteAPI',
+        empresa_id: dadosAPI.empresa_id
+    };
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret['result'];
+            if (resultado) {
+                let dadosJSON = JSON.stringify(resultado);
+                var form = $('<form action="gerar_excel.php" method="post" target="_blank">' +
+                    '<input type="hidden" name="desc_filtro" value="' + filtrar_palavra + '" />' +
+                    '<input type="hidden" name="dados" value=\'' + dadosJSON + '\' />' +
+                    '</form>');
+                $('body').append(form);
+                form.submit();
+                form.remove();
+            } else {
+                MensagemGenerica("Nenhum dado encontrado");
+                $("#dynamic-table").html('');
+            }
+        }
+    });
 }
 
 
@@ -2054,65 +2079,88 @@ function ImportarEquipamento(id_form) {
         Sair();
     }
     if (NotificarCampos(id_form)) {
-    load();
-    let id_user_tec = dadosAPI.tecnico_id;
-    var excelFile = $("#excel-file")[0].files[0];
+        load();
+        let id_user_tec = dadosAPI.tecnico_id;
+        var excelFile = $("#excel-file")[0].files[0];
 
-    var formData = new FormData();
-    formData.append('endpoint', 'ImportarEquipamentoSQL');
-    formData.append('id', id_user_tec);
-    formData.append('equipamento_id', $("#equipamento").val());
-    formData.append('qtd_equip', $("#qtd_equip").val());
-    formData.append('numero_lote', $("#numero_lote").val());
-    formData.append('empresa_id', dadosAPI.empresa_id);
-    formData.append('data_lote', $('#data_lote').val());
-    formData.append('excel', excelFile);
-    $.ajax({
-        type: "POST",
-        url: BASE_URL_AJAX("tecnico_api"),
-        data: formData,
-        processData: false,
-        contentType: false,
-        headers: {
-            'Authorization': 'Bearer ' + GetTnk(),
-        },
-        success: function (dados) {
-            $("#loading").hide();
-            let resultado = dados['result'];
-            if (resultado === 1) {
-                RemoverLoad();
-                MensagemSucesso();
-                FiltrarLote();
-                $("#lote").modal('hide');
-            } else if (resultado.status === -11) {
-                let rowCount = resultado.rowCount;
-                $("#qtd_equip").focus();
-                $("#qtd_equip").val(rowCount);
-                RemoverLoad();
-                MensagemGenerica(`Quantidade informada diferente da planilha (${rowCount} equipamentos), favor ajustar`, "warning");
-            } else if (resultado.status === -12) {
-                let rowCount = resultado.rowCount;
-                RemoverLoad();
-                MensagemGenerica("Formato de arquivo não suportado. Por favor, envie um arquivo Excel.", "warning");
-            } else if (resultado.status === 33) {
-                let rowCount = resultado.rowCount;
-                RemoverLoad();
-                MensagemGenerica("Erro no upload do arquivo. Por favor, tente novamente.", "error");
+        var formData = new FormData();
+        formData.append('endpoint', 'ImportarEquipamentoSQL');
+        formData.append('id', id_user_tec);
+        formData.append('equipamento_id', $("#equipamento").val());
+        formData.append('qtd_equip', $("#qtd_equip").val());
+        formData.append('numero_lote', $("#numero_lote").val());
+        formData.append('empresa_id', dadosAPI.empresa_id);
+        formData.append('data_lote', $('#data_lote').val());
+        formData.append('excel', excelFile);
+        $.ajax({
+            type: "POST",
+            url: BASE_URL_AJAX("tecnico_api"),
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'Authorization': 'Bearer ' + GetTnk(),
+            },
+            success: function (dados) {
+                $("#loading").hide();
+                let resultado = dados['result'];
+                if (resultado === 1) {
+                    RemoverLoad();
+                    MensagemSucesso();
+                    FiltrarLote();
+                    $("#lote").modal('hide');
+                } else if (resultado.status === -11) {
+                    let rowCount = resultado.rowCount;
+                    $("#qtd_equip").focus();
+                    $("#qtd_equip").val(rowCount);
+                    RemoverLoad();
+                    MensagemGenerica(`Quantidade informada diferente da planilha (${rowCount} equipamentos), favor ajustar`, "warning");
+                } else if (resultado.status === -12) {
+                    let rowCount = resultado.rowCount;
+                    RemoverLoad();
+                    MensagemGenerica("Formato de arquivo não suportado. Por favor, envie um arquivo Excel.", "warning");
+                } else if (resultado.status === 33) {
+                    let rowCount = resultado.rowCount;
+                    RemoverLoad();
+                    MensagemGenerica("Erro no upload do arquivo. Por favor, tente novamente.", "error");
+                }
             }
-        }
-    });
-}
+        });
+    }
     return false;
 }
 
+function AdicionarInsumoTodoLoteAjx() {
+    load();
+    let dadosAPI = GetTnkValue();
+    if (!dadosAPI.tecnico_id) {
+        Sair();
+    }
+    let dados = {
+        endpoint: 'AdicionarInsumoTodoLoteAPI',
+        id_lote: $("#id_lote").val(),
+        ids_insumo: $("#ids_insumos").val()
+    };
+    $.ajax({
+        type: "POST",
+        url: BASE_URL_AJAX("tecnico_api"),
+        data: JSON.stringify(dados),
+        headers: {
+            'Authorization': 'Bearer ' + GetTnk(),
+            'Content-Type': 'application/json'
+        },
+        success: function (dados_ret) {
+            var resultado = dados_ret["result"];
+            if (resultado == '1') {
+                MensagemSucesso();
+                FiltrarEquipamentoLote();
+                $("#modal_grupo_eq_lote").modal("hide");
+            } else {
+                MensagemErro();
+            }
+            RemoverLoad();
+        }
+    });
 
-
-
-
-
-
-
-
-
-
-
+    return false;
+}

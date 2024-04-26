@@ -2,16 +2,19 @@
 
 use Illuminate\Support\Facades\Redirect;
 
- require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 if (isset($_GET['id'])) {
 	$loteID = $_GET['id'];
 	$dataCriacao = $_GET['dtCriacao'];
-}else{ ?>
-	<script>MensagemGenerica("teste", 'warning')</script>
-	
-<?php  header('location: listar_lote.php');
-        exit; } ?>
+} else { ?>
+	<script>
+		MensagemGenerica("teste", 'warning')
+	</script>
+
+<?php header('location: listar_lote.php');
+	exit;
+} ?>
 
 <!DOCTYPE html>
 <html>
@@ -44,35 +47,44 @@ if (isset($_GET['id'])) {
 			font-size: 12px;
 			/* Tamanho da fonte das células */
 		}
+
 		h3 {
 			font-size: 17px;
 		}
-		body{
+
+		body {
 			font-size: 12px;
 		}
-	
-    .scrollable-table th, .scrollable-table td {
-    width: 150px; /* Defina a largura desejada para as células */
-    white-space: nowrap; /* Impede que o conteúdo seja quebrado em várias linhas */
-    overflow: hidden; /* Esconde qualquer conteúdo que exceda a largura das células */
-    text-overflow: ellipsis; /* Adiciona "..." ao final do conteúdo que não couber na célula */
-}
 
-/* Estilo para a div que contém a tabela */
-.table-container {
-    width: 100%;
-    max-height: 500px; /* Defina a altura máxima desejada para ativar a barra de rolagem vertical */
-    overflow: auto; /* Ativa a barra de rolagem vertical quando necessário */
-}
+		.scrollable-table th,
+		.scrollable-table td {
+			width: 150px;
+			/* Defina a largura desejada para as células */
+			white-space: nowrap;
+			/* Impede que o conteúdo seja quebrado em várias linhas */
+			overflow: hidden;
+			/* Esconde qualquer conteúdo que exceda a largura das células */
+			text-overflow: ellipsis;
+			/* Adiciona "..." ao final do conteúdo que não couber na célula */
+		}
 
-/* Estilo para a div que envolve a tabela */
-.table-wrapper {
-    max-width: 100%; /* Isso permite que a barra de rolagem horizontal apareça quando a tabela for mais larga */
-    overflow: auto; /* Ativa a barra de rolagem horizontal quando necessário */
-}
+		/* Estilo para a div que contém a tabela */
+		.table-container {
+			width: 100%;
+			max-height: 500px;
+			/* Defina a altura máxima desejada para ativar a barra de rolagem vertical */
+			overflow: auto;
+			/* Ativa a barra de rolagem vertical quando necessário */
+		}
 
-
-</style>
+		/* Estilo para a div que envolve a tabela */
+		.table-wrapper {
+			max-width: 100%;
+			/* Isso permite que a barra de rolagem horizontal apareça quando a tabela for mais larga */
+			overflow: auto;
+			/* Ativa a barra de rolagem horizontal quando necessário */
+		}
+	</style>
 
 </head>
 
@@ -133,18 +145,20 @@ if (isset($_GET['id'])) {
 									</div>
 								</div>
 								<div class="table-container">
-                                <div class="table-wrapper">
-								<div id="dynamic-table-container"></div></div>
+									<div class="table-wrapper">
+										<div id="dynamic-table-container"></div>
+									</div>
 								</div>
 								<?php
 								include_once 'modal/_lote.php';
 								include_once 'modal/_dadosLote.php';
+								include_once 'modal/_adicionar_grupo_eq_lote.php';
 								?>
 
 								<div class="col-sm-12" style="margin-top: 1px;">
-								
-								
-								
+
+
+
 								</div><!-- /.span -->
 								<div class="col-xs-12 col-sm-12">
 									<button class="btn btn-success btn-sm col-xs-12 col-sm-6" onclick="return EncerrarLote()"> Encerrar lote</button>
@@ -160,33 +174,47 @@ if (isset($_GET['id'])) {
 
 
 			</div><!-- /.final do conteudo da pagina -->
-
-
-
+			<center>
+				<div id="loading-spinner" class="fullscreen-spinner">
+					<div class="spinner"></div>
+				</div>
+			</center>
 		</div><!-- /.main-content -->
 
 		<?php include_once PATH_URL . './Template/_includes/_footer.php' ?>
 	</div><!-- /.final do conteudo Princial -->
 
 	<?php include_once PATH_URL . './Template/_includes/_scripts.php' ?>
-		<!-- page specific plugin scripts -->
-		<script src="assets/js/jquery.dataTables.min.js"></script>
-		<script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
-		<script src="assets/js/dataTables.buttons.min.js"></script>
-		<script src="assets/js/buttons.flash.min.js"></script>
-		<script src="assets/js/buttons.html5.min.js"></script>
-		<script src="assets/js/buttons.print.min.js"></script>
-		<script src="assets/js/buttons.colVis.min.js"></script>
-		<script src="assets/js/dataTables.select.min.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Mostra o spinner quando a página é carregada
+			load();
+
+			// Aqui, você pode adicionar qualquer código de inicialização da página, se necessário.
+
+			// Após a conclusão do carregamento inicial da página (por exemplo, quando todos os recursos são carregados), oculte o spinner.
+			window.addEventListener("load", function() {
+				RemoverLoad();
+			});
+		});
+	</script>
+	<!-- page specific plugin scripts -->
+	<script src="assets/js/jquery.dataTables.min.js"></script>
+	<script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
+	<script src="assets/js/dataTables.buttons.min.js"></script>
+	<script src="assets/js/buttons.flash.min.js"></script>
+	<script src="assets/js/buttons.html5.min.js"></script>
+	<script src="assets/js/buttons.print.min.js"></script>
+	<script src="assets/js/buttons.colVis.min.js"></script>
+	<script src="assets/js/dataTables.select.min.js"></script>
 
 	<script src="../Resource/js/mensagem.js"></script>
 	<script src="../Resource/ajax/tecnico-ajx.js"></script>
 	<script>
 		Verify();
 		FiltrarEquipamentoLote();
-		
 	</script>
-	
+
 
 </body>
 
